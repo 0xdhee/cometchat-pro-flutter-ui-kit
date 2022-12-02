@@ -222,9 +222,9 @@ class Palette {
   const Palette(
       {this.mode = PaletteThemeModes.light,
       this.backGroundColor =
-          const PaletteModel(light: Color(0xffFFFFFF), dark: Color(0xff000000)),
+          const PaletteModel(light: Color(0xffFFFFFF), dark: Color(0xFF050014)),
       this.primary =
-          const PaletteModel(light: Color(0xff3399FF), dark: Color(0xff3399FF)),
+          const PaletteModel(light: Color(0xff3399FF), dark: Color(0xff3DBCA1)),
       this.secondary =
           const PaletteModel(light: Color(0xffF8F8F8), dark: Color(0xff333333)),
       this.error =

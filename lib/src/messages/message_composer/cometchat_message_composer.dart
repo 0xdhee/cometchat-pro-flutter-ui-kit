@@ -633,7 +633,8 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
             color: _theme.palette.getAccent()),
         backgroundColor: _theme.palette.getBackground(),
         iconBackground: _theme.palette.getAccent100(),
-        layoutIconColor: _theme.palette.getPrimary());
+        layoutIconColor: _theme.palette.getPrimary(),
+        isLayoutModeIconVisible: false);
 
     if (item == null) {
       return;
@@ -683,34 +684,6 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
   }
 
   Widget _getSendButton(CometChatTheme _theme) {
-    if (textEditingController.text.isEmpty &&
-        widget.hideLiveReaction == false) {
-      return IconButton(
-        padding: const EdgeInsets.all(0),
-        constraints: const BoxConstraints(),
-        icon: widget.style.liveReactionIcon ??
-            Image.asset("assets/icons/heart.png",
-                package: UIConstants.packageName,
-                color: _theme.palette.getError()),
-        onPressed: () async {
-          if (_hideLiveReaction == false) {
-            //setState(() {
-            _hideLiveReaction = true;
-            //});
-            try {
-              _sendLiveReaction();
-            } catch (_) {}
-            await Future.delayed(const Duration(milliseconds: 1500));
-            // if (mounted) {
-            //   setState(() {
-            _hideLiveReaction = false;
-            //   });
-            // }
-          }
-        },
-      );
-    }
-
     if (widget.showSendButton) {
       return IconButton(
           padding: const EdgeInsets.all(0),
@@ -722,10 +695,13 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                 color: textEditingController.text.isEmpty
                     ? _theme.palette.getAccent400()
                     : _theme.palette.getPrimary(),
+                // color: textEditingController.text.trim().isEmpty
+                //     ? Colors.white54
+                //     : const Color(0xFFFC7A42),
               ),
           onPressed: widget.onSendButtonClick ??
               () {
-                if (textEditingController.text.isNotEmpty) {
+                if (textEditingController.text.trim().isNotEmpty) {
                   if (previewMessageMode == PreviewMessageMode.none) {
                     sendTextMessage();
                   } else if (previewMessageMode == PreviewMessageMode.edit) {
@@ -762,7 +738,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
     });
   }
 
-  @override
+  /*@override
   Widget build(BuildContext context) {
     CometChatTheme _theme = widget.theme ?? cometChatTheme;
 
@@ -786,6 +762,9 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
             decoration: BoxDecoration(
               color: widget.style.background ?? _theme.palette.getBackground(),
             ),
+            // decoration: const BoxDecoration(
+            //   color: Color(0xFF1C162A),
+            // ),
             padding:
                 const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
             child: Column(
@@ -827,6 +806,11 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                           ? widget.style.background ??
                               _theme.palette.getAccent100()
                           : null,
+                      // color: const Color(0xFF1C162A),
+                      // border: Border.all(
+                      //   width: 1,
+                      //   color: Colors.white24,
+                      // ),
                       border: widget.style.border,
                       borderRadius: BorderRadius.all(
                           Radius.circular(widget.style.cornerRadius ?? 8.0)),
@@ -836,11 +820,15 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                       //-----text field-----
                       if (_hideTextField == false)
                         Container(
+                          // margin: const EdgeInsets.only(
+                          //     left: 12, right: 12, top: 10, bottom: 10),
+                          // color: const Color(0xFF1C1138),
                           color: widget.style.inputBackground,
                           padding: const EdgeInsets.only(left: 12.0, right: 12),
                           child: TextFormField(
                             style: widget.style.inputTextStyle ??
                                 TextStyle(
+                                  // color: Colors.white,
                                   color: _theme.palette.getAccent(),
                                   fontSize: _theme.typography.name.fontSize,
                                   fontWeight: _theme.typography.name.fontWeight,
@@ -859,6 +847,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                               hintStyle: widget.style.placeholderTextStyle ??
                                   TextStyle(
                                     color: _theme.palette.getAccent600(),
+                                    // color: Colors.white60,
                                     fontSize: _theme.typography.name.fontSize,
                                     fontWeight:
                                         _theme.typography.name.fontWeight,
@@ -874,6 +863,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                         Divider(
                           height: 1,
                           color: _theme.palette.getAccent100(),
+                          // color: Colors.transparent,
                         ),
                       Container(
                         height: 40,
@@ -889,6 +879,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                                     "assets/icons/add.png",
                                     package: UIConstants.packageName,
                                     color: _theme.palette.getAccent700(),
+                                    // color: Colors.white70,
                                   ),
                                   onPressed: () async {
                                     _showBottomActionSheet(_theme, context);
@@ -905,6 +896,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                                     "assets/icons/smileys.png",
                                     package: UIConstants.packageName,
                                     color: _theme.palette.getAccent700(),
+                                    // color: Colors.white70,
                                   ),
                                   onPressed: () async {
                                     String? emoji =
@@ -953,6 +945,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                                           "assets/icons/smile.png",
                                           package: UIConstants.packageName,
                                           color: _theme.palette.getAccent700(),
+                                          // color: Colors.white70,
                                         ),
                                   onPressed: () async {
                                     if (_isStickerKeyboardOpen) {
@@ -971,6 +964,265 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
                           ],
                         ),
                       )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (_isStickerKeyboardOpen)
+            CometChatStickerKeyboard(
+              theme: _theme,
+              onStickerTap: (Sticker sticker) {
+                sendSticker(sticker);
+              },
+            )
+        ],
+      ),
+    );
+  }*/
+
+  @override
+  Widget build(BuildContext context) {
+    CometChatTheme _theme = widget.theme ?? cometChatTheme;
+
+    if (_getMessageCategoryCalled == false) {
+      _getMessageCategoryCalled = true;
+      _getMessageCategory(_theme, context);
+    }
+
+    return WillPopScope(
+      onWillPop: () async {
+        if (_isStickerKeyboardOpen) {
+          _isStickerKeyboardOpen = false;
+          setState(() {});
+          return false;
+        }
+        return true;
+      },
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: widget.style.background ?? _theme.palette.getBackground(),
+            ),
+            // decoration: const BoxDecoration(
+            //   color: Color(0xFF1C162A),
+            // ),
+            padding:
+                const EdgeInsets.only(left: 8, right: 8, top: 10, bottom: 10),
+            child: Column(
+              children: [
+                //-----message preview container-----
+                if (messagePreviewTitle != null &&
+                    messagePreviewTitle!.isNotEmpty)
+                  CometChatMessagePreview(
+                    messagePreviewTitle: messagePreviewTitle!,
+                    messagePreviewSubtitle: messagePreviewSubtitle ?? '',
+                    onCloseClick: () {
+                      previewMessageMode = PreviewMessageMode.none;
+                      messagePreviewTitle = "";
+                      messagePreviewSubtitle = "";
+                      setState(() {});
+                    },
+                    style: CometChatMessagePreviewStyle(
+                        messagePreviewTitleStyle: TextStyle(
+                            color: _theme.palette.getAccent600(),
+                            fontSize: _theme.typography.text2.fontSize,
+                            fontWeight: _theme.typography.text2.fontWeight,
+                            fontFamily: _theme.typography.text2.fontFamily),
+                        messagePreviewSubtitleStyle: TextStyle(
+                            color: _theme.palette.getAccent600(),
+                            fontSize: _theme.typography.text2.fontSize,
+                            fontWeight: _theme.typography.text2.fontWeight,
+                            fontFamily: _theme.typography.text2.fontFamily),
+                        closeIconColor: _theme.palette.getAccent500(),
+                        messagePreviewBorder: Border(
+                            left: BorderSide(
+                                color: _theme.palette.getAccent100(),
+                                width: 3))),
+                  ),
+
+                //-----
+                Container(
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                  ),
+                  decoration: BoxDecoration(
+                      color: widget.style.gradient == null
+                          ? widget.style.background ??
+                              _theme.palette.getAccent100()
+                          : null,
+                      // color: const Color(0xFF1C162A),
+                      // border: Border.all(
+                      //   width: 1,
+                      //   color: Colors.white24,
+                      // ),
+                      border: widget.style.border,
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(widget.style.cornerRadius ?? 30.0)),
+                      gradient: widget.style.gradient),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      //-----show emoji keyboard-----
+                      if (widget.hideEmoji == false)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 12,
+                          ),
+                          child: IconButton(
+                              padding: const EdgeInsets.only(left: 5),
+                              constraints: const BoxConstraints(),
+                              icon: Image.asset(
+                                "assets/icons/smileys.png",
+                                package: UIConstants.packageName,
+                                color: _theme.palette.getAccent700(),
+                                // color: Colors.white70,
+                              ),
+                              onPressed: () async {
+                                String? emoji =
+                                    await showCometChatEmojiKeyboard(
+                                        context: context,
+                                        backgroundColor:
+                                            _theme.palette.getBackground(),
+                                        titleStyle: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: _theme
+                                                .typography.name.fontWeight,
+                                            color: _theme.palette.getAccent()),
+                                        categoryLabel: TextStyle(
+                                            fontSize: _theme
+                                                .typography.caption1.fontSize,
+                                            fontWeight: _theme
+                                                .typography.caption1.fontWeight,
+                                            color:
+                                                _theme.palette.getAccent600()),
+                                        dividerColor:
+                                            _theme.palette.getAccent100(),
+                                        selectedCategoryIconColor:
+                                            _theme.palette.getPrimary(),
+                                        unselectedCategoryIconColor:
+                                            _theme.palette.getAccent600());
+                                if (emoji != null) {
+                                  textEditingController.text += emoji;
+                                  setState(() {});
+                                }
+                              } //do something,
+                              ),
+                        ),
+                      //-----text field-----
+                      if (_hideTextField == false)
+                        Expanded(
+                          child: Container(
+                            // margin: const EdgeInsets.only(
+                            //     left: 12, right: 12, top: 10, bottom: 10),
+                            // color: const Color(0xFF1C1138),
+                            color: widget.style.inputBackground,
+                            padding: const EdgeInsets.only(
+                                left: 12.0, right: 12, bottom: 0),
+                            child: TextFormField(
+                              style: widget.style.inputTextStyle ??
+                                  TextStyle(
+                                    // color: Colors.white,
+                                    color: _theme.palette.getAccent(),
+                                    fontSize: _theme.typography.name.fontSize,
+                                    fontWeight:
+                                        _theme.typography.name.fontWeight,
+                                    fontFamily:
+                                        _theme.typography.name.fontFamily,
+                                  ),
+                              onChanged: (val) {
+                                _onTyping();
+                                setState(() {});
+                              },
+                              controller: textEditingController,
+                              focusNode: focusNode,
+                              maxLines: 4,
+                              minLines: 1,
+                              decoration: InputDecoration(
+                                hintText: widget.placeholderText ??
+                                    Translations.of(context).message,
+                                hintStyle: widget.style.placeholderTextStyle ??
+                                    TextStyle(
+                                      color: _theme.palette.getAccent600(),
+                                      // color: Colors.white60,
+                                      fontSize: _theme.typography.name.fontSize,
+                                      fontWeight:
+                                          _theme.typography.name.fontWeight,
+                                      fontFamily:
+                                          _theme.typography.name.fontFamily,
+                                    ),
+                                focusedBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      // const Spacer(),
+
+                      //-----show add to chat bottom sheet-----
+                      if (_actionItems.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 12,
+                          ),
+                          child: IconButton(
+                              padding: const EdgeInsets.only(right: 12),
+                              constraints: const BoxConstraints(),
+                              icon: Image.asset(
+                                "assets/icons/add.png",
+                                package: UIConstants.packageName,
+                                color: _theme.palette.getAccent700(),
+                                // color: Colors.white70,
+                              ),
+                              onPressed: () async {
+                                _showBottomActionSheet(_theme, context);
+                              } //do something,
+                              ),
+                        ),
+                      //-----show sticker keyboard-----
+                      if (_hideSticker == false)
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 12,
+                          ),
+                          child: IconButton(
+                              padding: const EdgeInsets.only(right: 10),
+                              constraints: const BoxConstraints(),
+                              icon: _isStickerKeyboardOpen
+                                  ? Image.asset(
+                                      "assets/icons/keyboard.png",
+                                      package: UIConstants.packageName,
+                                      color: _theme.palette.getAccent700(),
+                                    )
+                                  : Image.asset(
+                                      "assets/icons/smile.png",
+                                      package: UIConstants.packageName,
+                                      color: _theme.palette.getAccent700(),
+                                      // color: Colors.white70,
+                                    ),
+                              onPressed: () async {
+                                if (_isStickerKeyboardOpen) {
+                                  focusNode.requestFocus();
+                                } else {
+                                  focusNode.unfocus();
+                                }
+                                _isStickerKeyboardOpen =
+                                    !_isStickerKeyboardOpen;
+                                setState(() {});
+                              } //do something,
+                              ),
+                        ),
+
+                      //  -----show send or live reaction button-----
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 12,
+                        ),
+                        child: _getSendButton(_theme),
+                      ),
                     ],
                   ),
                 ),

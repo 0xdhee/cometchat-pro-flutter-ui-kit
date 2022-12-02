@@ -22,22 +22,26 @@ import 'message_composer/live_reaction_animation.dart';
 /// ```
 
 class CometChatMessages extends StatefulWidget {
-  const CometChatMessages(
-      {Key? key,
-      this.user,
-      this.group,
-      this.hideMessageComposer = false,
-      this.theme,
-      this.messageListConfiguration = const MessageListConfiguration(),
-      this.messageHeaderConfiguration = const MessageHeaderConfiguration(),
-      this.messageComposerConfiguration = const MessageComposerConfiguration(),
-      this.enableTypingIndicator = true,
-      this.enableSoundForMessages = true,
-      this.stateCallBack,
-      this.messageTypes,
-      this.excludeMessageTypes,
-      this.notifyParent})
-      : super(key: key);
+  const CometChatMessages({
+    Key? key,
+    this.user,
+    this.group,
+    this.hideMessageComposer = false,
+    this.theme,
+    this.messageListConfiguration = const MessageListConfiguration(),
+    this.messageHeaderConfiguration = const MessageHeaderConfiguration(),
+    this.messageComposerConfiguration = const MessageComposerConfiguration(),
+    this.enableTypingIndicator = true,
+    this.enableSoundForMessages = true,
+    this.stateCallBack,
+    this.messageTypes,
+    this.excludeMessageTypes,
+    this.notifyParent,
+    required this.onTapUrl,
+  }) : super(key: key);
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
 
   ///[user] user uid for user message list
   final String? user;
@@ -227,6 +231,7 @@ class CometChatMessagesState extends State<CometChatMessages>
 
   Widget getMessageList() {
     return CometChatMessageList(
+      onTapUrl: widget.onTapUrl,
       user: widget.user,
       group: widget.group,
       theme: widget.theme,
@@ -294,34 +299,34 @@ class CometChatMessagesState extends State<CometChatMessages>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: CometChatMessageHeader(
-          user: widget.user,
-          group: widget.group,
-          enableTypingIndicator: widget.enableTypingIndicator,
-          theme: widget.theme,
-          showBackButton: widget.messageHeaderConfiguration.showBackButton,
-          backButton: widget.messageHeaderConfiguration.backButton,
-          avatarConfiguration:
-              widget.messageHeaderConfiguration.avatarConfiguration,
-          statusIndicatorConfiguration:
-              widget.messageHeaderConfiguration.statusIndicatorConfiguration,
-        ),
-        body: Stack(
-          children: [
-            Column(
-              children: [
-                //----message list-----
-                Expanded(child: getMessageList()),
+    return Scaffold(
+      // backgroundColor: const Color(0xFF382D59),
+      // appBar: CometChatMessageHeader(
+      //   user: widget.user,
+      //   group: widget.group,
+      //   enableTypingIndicator: widget.enableTypingIndicator,
+      //   theme: widget.theme,
+      //   showBackButton: widget.messageHeaderConfiguration.showBackButton,
+      //   backButton: widget.messageHeaderConfiguration.backButton,
+      //   avatarConfiguration:
+      //       widget.messageHeaderConfiguration.avatarConfiguration,
+      //   statusIndicatorConfiguration:
+      //       widget.messageHeaderConfiguration.statusIndicatorConfiguration,
+      // ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              //----message list-----
+              Expanded(child: getMessageList()),
 
-                //-----message composer-----
-                if (widget.hideMessageComposer == false) getMessageComposer()
-              ],
-            ),
-            if (_isOverlayOpen == true) ..._liveAnimationList
-          ],
-        ),
+              //-----message composer-----
+              if (widget.hideMessageComposer == false)
+                SafeArea(top: false, child: getMessageComposer())
+            ],
+          ),
+          if (_isOverlayOpen == true) ..._liveAnimationList
+        ],
       ),
     );
   }

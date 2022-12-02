@@ -50,24 +50,28 @@ import 'video_player.dart';
 ///
 /// ```
 class CometChatMessageBubble extends StatelessWidget {
-  const CometChatMessageBubble(
-      {Key? key,
-      this.messageInputData = const MessageInputData(),
-      this.style = const MessageBubbleStyle(),
-      this.alignment = BubbleAlignment.left,
-      this.timeAlignment = TimeAlignment.bottom,
-      required this.messageObject,
-      this.loggedInUserId = '',
-      this.threadReplies = true,
-      this.reactions = true,
-      this.avatarConfiguration = const AvatarConfiguration(),
-      this.dateConfiguration = const DateConfiguration(),
-      this.messageReceiptConfiguration = const MessageReceiptConfiguration(),
-      this.theme,
-      this.receiverUserId,
-      this.receiverGroupId,
-      this.customView})
-      : super(key: key);
+  const CometChatMessageBubble({
+    Key? key,
+    this.messageInputData = const MessageInputData(),
+    this.style = const MessageBubbleStyle(),
+    this.alignment = BubbleAlignment.left,
+    this.timeAlignment = TimeAlignment.bottom,
+    required this.messageObject,
+    this.loggedInUserId = '',
+    this.threadReplies = true,
+    this.reactions = true,
+    this.avatarConfiguration = const AvatarConfiguration(),
+    this.dateConfiguration = const DateConfiguration(),
+    this.messageReceiptConfiguration = const MessageReceiptConfiguration(),
+    this.theme,
+    this.receiverUserId,
+    this.receiverGroupId,
+    this.customView,
+    required this.onTapUrl,
+  }) : super(key: key);
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
 
   ///[messageBubbleData] message bubble data
   final MessageInputData messageInputData;
@@ -231,6 +235,7 @@ class CometChatMessageBubble extends StatelessWidget {
     TextMessage textMessage = messageObject as TextMessage;
     return GestureDetector(
       child: CometChatTextBubble(
+        onTapUrl: onTapUrl,
         messageObject: textMessage,
         loggedInUserId: loggedInUserId,
         textStyle: TextStyle(
@@ -715,6 +720,7 @@ class CometChatMessageBubble extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => CometChatMessageThread(
+                        onTapUrl: onTapUrl,
                         message: messageObject,
                         theme: _theme,
                         group: receiverGroupId,

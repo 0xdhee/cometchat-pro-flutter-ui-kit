@@ -22,12 +22,16 @@ import 'package:flutter_chat_ui_kit/flutter_chat_ui_kit.dart';
 /// ```
 
 class CometChatUsersWithMessages extends StatefulWidget {
-  const CometChatUsersWithMessages(
-      {Key? key,
-      this.theme,
-      this.usersConfiguration = const UsersConfiguration(),
-      this.messageConfiguration = const MessageConfiguration()})
-      : super(key: key);
+  const CometChatUsersWithMessages({
+    Key? key,
+    this.theme,
+    this.usersConfiguration = const UsersConfiguration(),
+    this.messageConfiguration = const MessageConfiguration(),
+    required this.onTapUrl,
+  }) : super(key: key);
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
 
   ///[theme] can pass custom theme
   final CometChatTheme? theme;
@@ -65,6 +69,7 @@ class _CometChatUsersWithMessagesState extends State<CometChatUsersWithMessages>
         context,
         MaterialPageRoute(
             builder: (context) => CometChatMessages(
+                  onTapUrl: widget.onTapUrl,
                   user: user.uid,
                   theme: widget.theme,
                   enableTypingIndicator:

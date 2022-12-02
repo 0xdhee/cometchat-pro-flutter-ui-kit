@@ -48,38 +48,42 @@ import '../message_bubbles/bubble_utils.dart';
 /// ```
 
 class CometChatMessageList extends StatefulWidget {
-  const CometChatMessageList(
-      {Key? key,
-      this.limit = 30,
-      this.onlyUnread = false,
-      this.hideMessagesFromBlockedUsers = true,
-      this.hideDeletedMessages = false,
-      this.threadParentMessageId = 0,
-      this.hideThreadReplies = false,
-      this.tags,
-      this.user,
-      this.group,
-      this.theme,
-      this.stateCallBack,
-      this.alignment = ChatAlignment.standard,
-      this.sentMessageInputData,
-      this.receivedMessageInputData,
-      this.excludeMessageTypes,
-      this.emptyText,
-      this.errorText,
-      this.hideError = false,
-      this.customView = const CustomView(),
-      //this.onErrorCallBack,
-      this.scrollToBottomOnNewMessage = false,
-      this.messageTypes,
-      this.enableSoundForMessages = true,
-      this.customIncomingMessageSound,
-      this.showEmojiInLargerSize = true,
-      this.messageBubbleConfiguration = const MessageBubbleConfiguration(),
-      this.excludedMessageOptions,
-      this.style = const MessageListStyle(),
-      this.notifyParent})
-      : super(key: key);
+  const CometChatMessageList({
+    Key? key,
+    this.limit = 30,
+    this.onlyUnread = false,
+    this.hideMessagesFromBlockedUsers = true,
+    this.hideDeletedMessages = false,
+    this.threadParentMessageId = 0,
+    this.hideThreadReplies = false,
+    this.tags,
+    this.user,
+    this.group,
+    this.theme,
+    this.stateCallBack,
+    this.alignment = ChatAlignment.standard,
+    this.sentMessageInputData,
+    this.receivedMessageInputData,
+    this.excludeMessageTypes,
+    this.emptyText,
+    this.errorText,
+    this.hideError = false,
+    this.customView = const CustomView(),
+    //this.onErrorCallBack,
+    this.scrollToBottomOnNewMessage = false,
+    this.messageTypes,
+    this.enableSoundForMessages = true,
+    this.customIncomingMessageSound,
+    this.showEmojiInLargerSize = true,
+    this.messageBubbleConfiguration = const MessageBubbleConfiguration(),
+    this.excludedMessageOptions,
+    this.style = const MessageListStyle(),
+    this.notifyParent,
+    required this.onTapUrl,
+  }) : super(key: key);
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
 
   ///[user] user uid for user message list
   final String? user;
@@ -459,7 +463,10 @@ class CometChatMessageListState extends State<CometChatMessageList>
           String _error = Utils.getErrorTranslatedText(context, e.code);
           showCometChatConfirmDialog(
               context: context,
-              messageText: Text(widget.errorText ?? _error),
+              messageText: Text(widget.errorText ?? _error, style: TextStyle(
+                      fontSize: theme.typography.text2.fontSize,
+                      fontWeight: theme.typography.text2.fontWeight,
+                      color: theme.palette.getAccent())),
               confirmButtonText: Translations.of(context).try_again,
               cancelButtonText: Translations.of(context).cancel_capital,
               style: ConfirmDialogStyle(
@@ -476,7 +483,7 @@ class CometChatMessageListState extends State<CometChatMessageList>
                       color: theme.palette.getPrimary())),
               onCancel: () {
                 Navigator.pop(context);
-                Navigator.pop(context);
+                // Navigator.pop(context);
               },
               onConfirm: () {
                 Navigator.pop(context);
@@ -709,6 +716,7 @@ class CometChatMessageListState extends State<CometChatMessageList>
         context,
         MaterialPageRoute(
             builder: (context) => CometChatMessageThread(
+                  onTapUrl: widget.onTapUrl,
                   message: message,
                   theme: theme,
                   group: widget.group,
@@ -1086,6 +1094,7 @@ class CometChatMessageListState extends State<CometChatMessageList>
         CometChatMessageEvents.onMessageTap(messageObject);
       },
       child: CometChatMessageBubble(
+        onTapUrl: widget.onTapUrl,
         customView: _templateMapWithView[messageObject.type],
         messageObject: messageObject,
         loggedInUserId: loggedInUser?.uid ?? '',
@@ -1276,6 +1285,7 @@ class CometChatMessageListState extends State<CometChatMessageList>
               ? widget.style.background ?? theme.palette.getBackground()
               : null,
           gradient: widget.style.gradient),
+      // color: const Color(0xFF382D59), gradient: widget.style.gradient),
       child: _getBody(),
     );
   }

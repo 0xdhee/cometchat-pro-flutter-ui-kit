@@ -14,13 +14,17 @@ enum ChatsAlignment { standard, side }
 /// ```
 ///
 class CometChatConversationsWithMessages extends StatefulWidget {
-  const CometChatConversationsWithMessages(
-      {Key? key,
-      this.theme,
-      this.conversationConfigurations = const ConversationConfigurations(),
-      this.messageConfiguration = const MessageConfiguration(),
-      this.stateCallBack})
-      : super(key: key);
+  const CometChatConversationsWithMessages({
+    Key? key,
+    required this.onTapUrl,
+    this.theme,
+    this.conversationConfigurations = const ConversationConfigurations(),
+    this.messageConfiguration = const MessageConfiguration(),
+    this.stateCallBack,
+  }) : super(key: key);
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
 
   final CometChatTheme? theme;
 
@@ -67,6 +71,7 @@ class CometChatConversationsWithMessagesState
         context,
         MaterialPageRoute(
           builder: (context) => CometChatMessages(
+            onTapUrl: widget.onTapUrl,
             user: _userId,
             group: _groupId,
             theme: widget.theme,

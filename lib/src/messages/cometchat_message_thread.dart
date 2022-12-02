@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui_kit/flutter_chat_ui_kit.dart';
 
 class CometChatMessageThread extends StatefulWidget {
-  const CometChatMessageThread(
-      {Key? key, required this.message, this.theme, this.user, this.group})
-      : super(key: key);
+  const CometChatMessageThread({
+    Key? key,
+    required this.message,
+    this.theme,
+    this.user,
+    this.group,
+    required this.onTapUrl,
+  }) : super(key: key);
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
 
   final BaseMessage message;
 
@@ -102,6 +110,7 @@ class _CometChatMessageThreadState extends State<CometChatMessageThread>
 
   Widget getMessageList() {
     return CometChatMessageList(
+      onTapUrl: widget.onTapUrl,
       stateCallBack: messageListStateCallBack,
       threadParentMessageId: widget.message.id,
       user: widget.user,
@@ -140,6 +149,7 @@ class _CometChatMessageThreadState extends State<CometChatMessageThread>
         container: Column(
           children: [
             CometChatMessageBubble(
+                onTapUrl: widget.onTapUrl,
                 messageObject: widget.message,
                 alignment: BubbleAlignment.left,
                 threadReplies: false,

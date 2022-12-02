@@ -9,13 +9,17 @@ import 'bubble_utils.dart';
 ///
 ///used by default  when [messageObject.category]=message and [messageObject.type]=[MessageTypeConstants.text]
 class CometChatTextBubble extends StatelessWidget {
-  const CometChatTextBubble(
-      {Key? key,
-      this.textStyle,
-      this.messageObject,
-      this.text,
-      this.loggedInUserId})
-      : super(key: key);
+  const CometChatTextBubble({
+    Key? key,
+    required this.onTapUrl,
+    this.textStyle,
+    this.messageObject,
+    this.text,
+    this.loggedInUserId,
+  }) : super(key: key);
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
 
   ///[textStyle] for the text
   final TextStyle? textStyle;
@@ -29,15 +33,15 @@ class CometChatTextBubble extends StatelessWidget {
   ///[loggedInUserId] logged in user uid
   final String? loggedInUserId;
 
-  onTapUrl(String url) async {
-    if (BubbleUtils.urlRegex.hasMatch(url)) {
-      await launch(url);
-    } else if (BubbleUtils.emailRegex.hasMatch(url)) {
-      await launch('mailto:$url');
-    } else if (BubbleUtils.phoneNumberRegex.hasMatch(url)) {
-      await launch('tel:$url');
-    }
-  }
+  // onTapUrl(String url) async {
+  //   if (BubbleUtils.urlRegex.hasMatch(url)) {
+  //     await launch(url);
+  //   } else if (BubbleUtils.emailRegex.hasMatch(url)) {
+  //     await launch('mailto:$url');
+  //   } else if (BubbleUtils.phoneNumberRegex.hasMatch(url)) {
+  //     await launch('tel:$url');
+  //   }
+  // }
 
   TextStyle getTextStyle(String word) {
     if (BubbleUtils.urlRegex.hasMatch(word)) {
