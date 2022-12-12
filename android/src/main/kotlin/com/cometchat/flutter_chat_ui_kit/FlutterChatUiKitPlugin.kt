@@ -10,6 +10,7 @@ import android.media.AudioManager
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -114,15 +115,15 @@ class FlutterChatUiKitPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, P
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
-    TODO("Not yet implemented")
+    Log.i("Flutter Chat UI Kit", "onDetachedFromActivityForConfigChanges")
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
+    Log.i("Flutter Chat UI Kit", "onReattachedToActivityForConfigChanges")
   }
 
   override fun onDetachedFromActivity() {
-    TODO("Not yet implemented")
+    Log.i("Flutter Chat UI Kit", "onDetachedFromActivity")
   }
 
 //  private fun playDefaultSound(call: MethodCall, result: Result) {
