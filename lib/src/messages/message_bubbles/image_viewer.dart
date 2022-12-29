@@ -26,11 +26,25 @@ class ImageViewer extends StatelessWidget {
             IconThemeData(color: backIconColor ?? const Color(0xff3399FF)),
       ),
       backgroundColor: backgroundColor ?? const Color(0xffFFFFFF),
-      body: Center(
-        child: Image.network(messageObject.attachment!.fileUrl,
-            errorBuilder: (context, object, stackTrace) {
-          return const Center(child: Text("Failed To Load Image"));
-        }),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return SizedBox(
+            height: constraints.maxHeight,
+            child: InteractiveViewer(
+              maxScale: 5,
+              minScale: 1,
+              child: Center(
+                child: Image.network(
+                  messageObject.attachment!.fileUrl,
+                  errorBuilder: (context, object, stackTrace) {
+                    return const Center(child: Text("Failed To Load Image"));
+                  },
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
