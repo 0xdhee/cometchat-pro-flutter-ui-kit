@@ -1,8 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui_kit/flutter_chat_ui_kit.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'bubble_utils.dart';
 
 ///creates a widget that gives text bubble
@@ -84,8 +82,26 @@ class CometChatTextBubble extends StatelessWidget {
       return const SizedBox(height: 0, width: 0);
     }
 
-    List<String> words = _message.split(' ');
-
+    List<String?> words = [];
+    String word = '';
+    for (int i = 0; i < _message.length; i++) {
+      word += _message[i];
+      if (_message[i] == ' ') {
+        var wordToAdd = word.trim();
+        if (wordToAdd.isNotEmpty) {
+          words.add(wordToAdd);
+        }
+        word = '';
+      } else if (_message[i].codeUnits[0] == 10) {
+        var wordToAdd = word.trim();
+        if (wordToAdd.isNotEmpty) {
+          words.add(wordToAdd);
+        }
+        words.add(null);
+        word = '';
+      }
+    }
+    words.add(word.trim());
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -130,13 +146,13 @@ class CometChatTextBubble extends StatelessWidget {
                       fontWeight: FontWeight.w400,
                     ),
                 children: [
-                  for (String word in words)
+                  for (String? word in words)
                     TextSpan(
-                        text: word + ' ',
-                        style: getTextStyle(word),
+                        text: word != null ? '$word ' : '\n',
+                        style: getTextStyle(word ?? ''),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () async {
-                            await onTapUrl(word);
+                            await onTapUrl(word ?? '');
                           })
                 ]),
           ),
