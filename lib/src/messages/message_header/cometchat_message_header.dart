@@ -25,18 +25,20 @@ import 'package:cometchat/models/action.dart' as action;
 class CometChatMessageHeader extends StatefulWidget
     implements PreferredSizeWidget {
   ///creates a widget that gives message header
-  const CometChatMessageHeader(
-      {Key? key,
-      this.style = const MessageHeaderStyle(),
-      this.user,
-      this.group,
-      this.showBackButton = true,
-      this.backButton,
-      this.enableTypingIndicator = true,
-      this.theme,
-      this.avatarConfiguration,
-      this.statusIndicatorConfiguration})
-      : super(key: key);
+  const CometChatMessageHeader({
+    Key? key,
+    this.style = const MessageHeaderStyle(),
+    this.user,
+    this.group,
+    this.showBackButton = true,
+    this.backButton,
+    this.enableTypingIndicator = true,
+    this.theme,
+    this.avatarConfiguration,
+    this.statusIndicatorConfiguration,
+    this.trailing,
+    this.onTap,
+  }) : super(key: key);
 
   ///[user] user object if conversation with is User
   final String? user;
@@ -64,6 +66,12 @@ class CometChatMessageHeader extends StatefulWidget
 
   ///[statusIndicatorConfiguration] set configuration property for [CometChatStatusIndicator] used inside [CometChatMessageHeader]
   final StatusIndicatorConfiguration? statusIndicatorConfiguration;
+
+  ///[trailing] widget to show at the end
+  final Widget? trailing;
+
+  ///[onTap] handles the tap
+  final VoidCallback? onTap;
 
   @override
   State<CometChatMessageHeader> createState() => _CometChatMessageHeaderState();
@@ -302,24 +310,35 @@ class _CometChatMessageHeaderState extends State<CometChatMessageHeader>
   Widget build(BuildContext context) {
     CometChatTheme _theme = widget.theme ?? cometChatTheme;
 
-    return Container(
-      height: widget.style.height ?? 65,
-      width: widget.style.width ?? MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: widget.style.background ?? _theme.palette.getBackground(),
-          border: widget.style.border,
-          gradient: widget.style.gradient,
-          borderRadius: BorderRadius.circular(widget.style.cornerRadius ?? 0)),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          getBackButton(context, _theme),
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 16),
-            child: getListItem(_theme),
-          ))
-        ],
+    return SafeArea(
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: Container(
+          height: widget.style.height ?? 65,
+          width: widget.style.width ?? MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              color: widget.style.background ?? _theme.palette.getBackground(),
+              border: widget.style.border,
+              gradient: widget.style.gradient,
+              borderRadius:
+                  BorderRadius.circular(widget.style.cornerRadius ?? 0)),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              getBackButton(context, _theme),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 16),
+                  child: getListItem(_theme),
+                ),
+              ),
+              if (widget.trailing != null) ...[
+                const SizedBox(width: 8),
+                widget.trailing!,
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

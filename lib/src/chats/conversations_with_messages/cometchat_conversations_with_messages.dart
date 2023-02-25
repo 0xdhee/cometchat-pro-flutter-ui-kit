@@ -21,6 +21,8 @@ class CometChatConversationsWithMessages extends StatefulWidget {
     this.conversationConfigurations = const ConversationConfigurations(),
     this.messageConfiguration = const MessageConfiguration(),
     this.stateCallBack,
+    this.appBarTrailingWidget,
+    this.onTapMessageHeader,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
@@ -34,6 +36,12 @@ class CometChatConversationsWithMessages extends StatefulWidget {
 
   ///[stateCallBack] a call back to give state to its parent
   final void Function(CometChatConversationsWithMessagesState)? stateCallBack;
+
+  ///[appBarTrailingWidget] to show at the end of appBar
+  final Widget? appBarTrailingWidget;
+
+  ///[onTapMessageHeader] handles the tap on message header
+  final VoidCallback? onTapMessageHeader;
 
   @override
   State<CometChatConversationsWithMessages> createState() =>
@@ -71,6 +79,7 @@ class CometChatConversationsWithMessagesState
         context,
         MaterialPageRoute(
           builder: (context) => CometChatMessages(
+            showAppBar: true,
             onTapUrl: widget.onTapUrl,
             user: _userId,
             group: _groupId,
@@ -92,6 +101,8 @@ class CometChatConversationsWithMessagesState
                 widget.messageConfiguration.excludeMessageTypes,
             stateCallBack: messageStateCallBack,
             notifyParent: changeActiveId,
+            appBarTrailingWidget: widget.appBarTrailingWidget,
+            onTapMessageHeader: widget.onTapMessageHeader,
           ),
         ));
   }

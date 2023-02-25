@@ -24,6 +24,7 @@ import 'message_composer/live_reaction_animation.dart';
 class CometChatMessages extends StatefulWidget {
   const CometChatMessages({
     Key? key,
+    this.showAppBar = false,
     this.user,
     this.group,
     this.hideMessageComposer = false,
@@ -38,10 +39,15 @@ class CometChatMessages extends StatefulWidget {
     this.excludeMessageTypes,
     this.notifyParent,
     required this.onTapUrl,
+    this.appBarTrailingWidget,
+    this.onTapMessageHeader,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
   final Function(String) onTapUrl;
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final bool showAppBar;
 
   ///[user] user uid for user message list
   final String? user;
@@ -80,6 +86,12 @@ class CometChatMessages extends StatefulWidget {
 
   ///[notifyParent] method to tell parent message List is active
   final Function(String? id)? notifyParent;
+
+  ///[appBarTrailingWidget] to show at the end of appBar
+  final Widget? appBarTrailingWidget;
+
+  ///[onTapMessageHeader] handles the tap on message header
+  final VoidCallback? onTapMessageHeader;
 
   @override
   State<CometChatMessages> createState() => CometChatMessagesState();
@@ -300,19 +312,29 @@ class CometChatMessagesState extends State<CometChatMessages>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: const Color(0xFF382D59),
-      // appBar: CometChatMessageHeader(
-      //   user: widget.user,
-      //   group: widget.group,
-      //   enableTypingIndicator: widget.enableTypingIndicator,
-      //   theme: widget.theme,
-      //   showBackButton: widget.messageHeaderConfiguration.showBackButton,
-      //   backButton: widget.messageHeaderConfiguration.backButton,
-      //   avatarConfiguration:
-      //       widget.messageHeaderConfiguration.avatarConfiguration,
-      //   statusIndicatorConfiguration:
-      //       widget.messageHeaderConfiguration.statusIndicatorConfiguration,
-      // ),
+      backgroundColor: const Color(0xFF0B002C),
+      appBar: widget.showAppBar
+          ? CometChatMessageHeader(
+              user: widget.user,
+              group: widget.group,
+              enableTypingIndicator: widget.enableTypingIndicator,
+              theme: widget.theme,
+              showBackButton: widget.messageHeaderConfiguration.showBackButton,
+              backButton: widget.messageHeaderConfiguration.backButton,
+              avatarConfiguration:
+                  widget.messageHeaderConfiguration.avatarConfiguration,
+              statusIndicatorConfiguration: widget
+                  .messageHeaderConfiguration.statusIndicatorConfiguration,
+              style: const MessageHeaderStyle(
+                background: Color(0xFF0B002C),
+              ),
+              trailing: widget.appBarTrailingWidget,
+              onTap: widget.onTapMessageHeader,
+            )
+          : PreferredSize(
+              preferredSize: const Size.fromHeight(0),
+              child: Container(),
+            ),
       body: Stack(
         children: [
           Column(
