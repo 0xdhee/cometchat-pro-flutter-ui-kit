@@ -3,29 +3,31 @@ import 'package:flutter/material.dart';
 import '../../../flutter_chat_ui_kit.dart';
 
 class CometChatConversations extends StatefulWidget {
-  const CometChatConversations(
-      {Key? key,
-      this.title,
-      this.activeConversation,
-      this.conversationType = ConversationTypes.both,
-      this.style = const ConversationStyle(),
-      this.showBackButton = false,
-      this.backButton,
-      this.hideStartConversation = false,
-      this.startConversationIcon,
-      this.hideSearch = false,
-      this.search,
-      this.theme,
-      this.avatarConfiguration,
-      this.statusIndicatorConfiguration,
-      this.conversationListConfiguration =
-          const ConversationListConfigurations(),
-      this.badgeCountConfiguration,
-      this.conversationListItemConfiguration,
-      this.dateConfiguration,
-      this.messageReceiptConfiguration,
-      this.stateCallBack})
-      : super(key: key);
+  const CometChatConversations({
+    Key? key,
+    this.title,
+    this.activeConversation,
+    this.conversationType = ConversationTypes.both,
+    this.style = const ConversationStyle(),
+    this.showBackButton = false,
+    this.backButton,
+    this.hideStartConversation = false,
+    this.startConversationIcon,
+    this.hideSearch = false,
+    this.search,
+    this.theme,
+    this.avatarConfiguration,
+    this.statusIndicatorConfiguration,
+    this.conversationListConfiguration = const ConversationListConfigurations(),
+    this.badgeCountConfiguration,
+    this.conversationListItemConfiguration,
+    this.dateConfiguration,
+    this.messageReceiptConfiguration,
+    this.stateCallBack,
+    this.physics,
+    this.shrinkWrap = false,
+    this.groupTags,
+  }) : super(key: key);
 
   ///[title] title text
   final String? title;
@@ -82,6 +84,12 @@ class CometChatConversations extends StatefulWidget {
 
   ///[stateCallBack]
   final Function(CometChatConversationsState)? stateCallBack;
+
+  final bool shrinkWrap;
+
+  final ScrollPhysics? physics;
+
+  final Set<String>? groupTags;
 
   @override
   State<CometChatConversations> createState() => CometChatConversationsState();
@@ -141,55 +149,87 @@ class CometChatConversationsState extends State<CometChatConversations>
   @override
   Widget build(BuildContext context) {
     CometChatTheme _theme = widget.theme ?? cometChatTheme;
-    return CometChatListBase(
-      title: widget.title ?? Translations.of(context).chats,
-      style: ListBaseStyle(
-        titleStyle: widget.style.titleStyle,
-        background: widget.style.gradient == null
-            ? widget.style.background
-            : Colors.transparent,
-        gradient: widget.style.gradient,
+    // return CometChatListBase(
+    //   title: widget.title ?? Translations.of(context).chats,
+    //   style: ListBaseStyle(
+    //     titleStyle: widget.style.titleStyle,
+    //     background: widget.style.gradient == null
+    //         ? widget.style.background
+    //         : Colors.transparent,
+    //     gradient: widget.style.gradient,
+    //   ),
+    //   hideSearch: true,
+    //   showBackButton: widget.showBackButton,
+    //   backIcon: widget.backButton,
+    //   theme: widget.theme,
+    //   menuOptions: [
+    //     if (widget.hideStartConversation == false)
+    //       IconButton(
+    //         onPressed: () {},
+    //         icon: widget.startConversationIcon ??
+    //             Image.asset(
+    //               "assets/icons/write.png",
+    //               package: UIConstants.packageName,
+    //               color: _theme.palette.getPrimary(),
+    //             ),
+    //       )
+    //   ],
+    //   shrinkWrap: widget.shrinkWrap,
+    //   container: CometChatConversationList(
+    //     //-----conversation list configurations-----
+    //     limit: widget.conversationListConfiguration.limit,
+    //     userAndGroupTags: widget.conversationListConfiguration.userAndGroupTags,
+    //     customView: widget.conversationListConfiguration.customView ??
+    //         const CustomView(),
+    //     hideError: widget.conversationListConfiguration.hideError ?? false,
+    //     tags: widget.conversationListConfiguration.tags,
+    //     // onErrorCallBack: widget.conversationListConfiguration.onErrorCallBack,
+    //     conversationType: widget.conversationType,
+    //     theme: _theme,
+    //     avatarConfiguration: widget.avatarConfiguration,
+    //     statusIndicatorConfiguration: widget.statusIndicatorConfiguration,
+    //     badgeCountConfiguration: widget.badgeCountConfiguration,
+    //     dateConfiguration: widget.dateConfiguration,
+    //     messageReceiptConfiguration: widget.messageReceiptConfiguration,
+    //     conversationListItemConfiguration:
+    //         widget.conversationListItemConfiguration,
+    //     stateCallBack: conversationListStateCallBack,
+    //     style: ListStyle(
+    //       background: widget.style.gradient != null
+    //           ? Colors.transparent
+    //           : widget.style.background,
+    //     ),
+    //     physics: widget.physics,
+    //     shrinkWrap: widget.shrinkWrap,
+    //   ),
+    // );
+    return CometChatConversationList(
+      //-----conversation list configurations-----
+      limit: widget.conversationListConfiguration.limit,
+      userAndGroupTags: widget.conversationListConfiguration.userAndGroupTags,
+      customView:
+          widget.conversationListConfiguration.customView ?? const CustomView(),
+      hideError: widget.conversationListConfiguration.hideError ?? false,
+      tags: widget.conversationListConfiguration.tags,
+      // onErrorCallBack: widget.conversationListConfiguration.onErrorCallBack,
+      conversationType: widget.conversationType,
+      theme: _theme,
+      avatarConfiguration: widget.avatarConfiguration,
+      statusIndicatorConfiguration: widget.statusIndicatorConfiguration,
+      badgeCountConfiguration: widget.badgeCountConfiguration,
+      dateConfiguration: widget.dateConfiguration,
+      messageReceiptConfiguration: widget.messageReceiptConfiguration,
+      conversationListItemConfiguration:
+          widget.conversationListItemConfiguration,
+      stateCallBack: conversationListStateCallBack,
+      style: ListStyle(
+        background: widget.style.gradient != null
+            ? Colors.transparent
+            : widget.style.background,
       ),
-      hideSearch: true,
-      showBackButton: widget.showBackButton,
-      backIcon: widget.backButton,
-      theme: widget.theme,
-      menuOptions: [
-        if (widget.hideStartConversation == false)
-          IconButton(
-            onPressed: () {},
-            icon: widget.startConversationIcon ??
-                Image.asset(
-                  "assets/icons/write.png",
-                  package: UIConstants.packageName,
-                  color: _theme.palette.getPrimary(),
-                ),
-          )
-      ],
-      container: CometChatConversationList(
-        //-----conversation list configurations-----
-        limit: widget.conversationListConfiguration.limit,
-        userAndGroupTags: widget.conversationListConfiguration.userAndGroupTags,
-        customView: widget.conversationListConfiguration.customView ??
-            const CustomView(),
-        hideError: widget.conversationListConfiguration.hideError ?? false,
-        tags: widget.conversationListConfiguration.tags,
-        // onErrorCallBack: widget.conversationListConfiguration.onErrorCallBack,
-        conversationType: widget.conversationType,
-        theme: _theme,
-        avatarConfiguration: widget.avatarConfiguration,
-        statusIndicatorConfiguration: widget.statusIndicatorConfiguration,
-        badgeCountConfiguration: widget.badgeCountConfiguration,
-        dateConfiguration: widget.dateConfiguration,
-        messageReceiptConfiguration: widget.messageReceiptConfiguration,
-        conversationListItemConfiguration:
-            widget.conversationListItemConfiguration,
-        stateCallBack: conversationListStateCallBack,
-        style: ListStyle(
-            background: widget.style.gradient != null
-                ? Colors.transparent
-                : widget.style.background),
-      ),
+      physics: widget.physics,
+      shrinkWrap: widget.shrinkWrap,
+      groupTags: widget.groupTags,
     );
   }
 }

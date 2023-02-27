@@ -91,7 +91,7 @@ class CometChatMessages extends StatefulWidget {
   final Widget? appBarTrailingWidget;
 
   ///[onTapMessageHeader] handles the tap on message header
-  final VoidCallback? onTapMessageHeader;
+  final void Function(String groupId)? onTapMessageHeader;
 
   @override
   State<CometChatMessages> createState() => CometChatMessagesState();

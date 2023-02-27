@@ -30,29 +30,32 @@ class ItemFetcher<T> {
 }
 
 class CometChatConversationList extends StatefulWidget with MessageListener {
-  const CometChatConversationList(
-      {Key? key,
-      this.limit = 30,
-      this.conversationType = ConversationTypes.both,
-      this.userAndGroupTags,
-      this.tags,
-      this.style = const ListStyle(),
-      this.customView = const CustomView(),
-      this.emptyText,
-      this.errorText,
-      this.hideError = false,
-      //this.onErrorCallBack,
-      this.theme,
-      this.avatarConfiguration,
-      this.statusIndicatorConfiguration,
-      this.badgeCountConfiguration,
-      this.dateConfiguration,
-      this.messageReceiptConfiguration,
-      this.conversationListItemConfiguration,
-      this.stateCallBack,
-      this.enableSoundForMessages = true,
-      this.customIncomingMessageSound})
-      : super(key: key);
+  const CometChatConversationList({
+    Key? key,
+    this.limit = 30,
+    this.conversationType = ConversationTypes.both,
+    this.userAndGroupTags,
+    this.tags,
+    this.style = const ListStyle(),
+    this.customView = const CustomView(),
+    this.emptyText,
+    this.errorText,
+    this.hideError = false,
+    //this.onErrorCallBack,
+    this.theme,
+    this.avatarConfiguration,
+    this.statusIndicatorConfiguration,
+    this.badgeCountConfiguration,
+    this.dateConfiguration,
+    this.messageReceiptConfiguration,
+    this.conversationListItemConfiguration,
+    this.stateCallBack,
+    this.enableSoundForMessages = true,
+    this.customIncomingMessageSound,
+    this.shrinkWrap = false,
+    this.physics,
+    this.groupTags,
+  }) : super(key: key);
 
   ///[limit] no of conversations to be fetch at once
   final int? limit;
@@ -110,6 +113,12 @@ class CometChatConversationList extends StatefulWidget with MessageListener {
 
   ///[stateCallBack]
   final void Function(CometChatConversationListState)? stateCallBack;
+
+  final bool shrinkWrap;
+
+  final ScrollPhysics? physics;
+
+  final Set<String>? groupTags;
 
   @override
   CometChatConversationListState createState() =>
@@ -589,7 +598,27 @@ class CometChatConversationListState extends State<CometChatConversationList>
         } else {
           setState(() {
             isLoading = false;
-            conversationList.addAll(fetchedList);
+            if (widget.groupTags?.isNotEmpty ?? false) {
+              conversationList.addAll(
+                fetchedList.where((conversation) {
+                  if (conversation.conversationWith is Group) {
+                    final tags =
+                        (conversation.conversationWith as Group).tags.toSet();
+                    bool found = false;
+                    widget.groupTags?.forEach((tag) {
+                      if (tags.contains(tag)) {
+                        found = true;
+                        return;
+                      }
+                    });
+                    return found;
+                  }
+                  return false;
+                }).toList(),
+              );
+            } else {
+              conversationList.addAll(fetchedList);
+            }
           });
         }
       }, onError: (CometChatException e) {
@@ -827,6 +856,8 @@ class CometChatConversationListState extends State<CometChatConversationList>
       return _getNoChatIndicator(_theme);
     } else {
       return ListView.builder(
+        physics: widget.physics,
+        shrinkWrap: widget.shrinkWrap,
         padding: const EdgeInsets.all(0),
         itemCount: hasMoreItems
             ? conversationList.length + 1

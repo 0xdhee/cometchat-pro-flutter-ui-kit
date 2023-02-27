@@ -23,6 +23,9 @@ class CometChatConversationsWithMessages extends StatefulWidget {
     this.stateCallBack,
     this.appBarTrailingWidget,
     this.onTapMessageHeader,
+    this.physics,
+    this.shrinkWrap = false,
+    this.groupTags,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
@@ -41,7 +44,13 @@ class CometChatConversationsWithMessages extends StatefulWidget {
   final Widget? appBarTrailingWidget;
 
   ///[onTapMessageHeader] handles the tap on message header
-  final VoidCallback? onTapMessageHeader;
+  final void Function(String)? onTapMessageHeader;
+
+  final bool shrinkWrap;
+
+  final ScrollPhysics? physics;
+
+  final Set<String>? groupTags;
 
   @override
   State<CometChatConversationsWithMessages> createState() =>
@@ -159,6 +168,9 @@ class CometChatConversationsWithMessagesState
           widget.conversationConfigurations.conversationListConfiguration ??
               const ConversationListConfigurations(),
       stateCallBack: conversationStateCallBack,
+      physics: widget.physics,
+      shrinkWrap: widget.shrinkWrap,
+      groupTags: widget.groupTags,
     );
   }
 }

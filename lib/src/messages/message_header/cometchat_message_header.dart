@@ -71,7 +71,7 @@ class CometChatMessageHeader extends StatefulWidget
   final Widget? trailing;
 
   ///[onTap] handles the tap
-  final VoidCallback? onTap;
+  final void Function(String groupId)? onTap;
 
   @override
   State<CometChatMessageHeader> createState() => _CometChatMessageHeaderState();
@@ -312,7 +312,11 @@ class _CometChatMessageHeaderState extends State<CometChatMessageHeader>
 
     return SafeArea(
       child: GestureDetector(
-        onTap: widget.onTap,
+        onTap: () {
+          if (widget.onTap != null && widget.group != null) {
+            widget.onTap!(widget.group!);
+          }
+        },
         child: Container(
           height: widget.style.height ?? 65,
           width: widget.style.width ?? MediaQuery.of(context).size.width,
