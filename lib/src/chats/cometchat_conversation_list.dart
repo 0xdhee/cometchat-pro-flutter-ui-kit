@@ -598,7 +598,7 @@ class CometChatConversationListState extends State<CometChatConversationList>
         } else {
           setState(() {
             isLoading = false;
-            if (widget.groupTags?.isNotEmpty ?? false) {
+            if (widget.groupTags != null) {
               conversationList.addAll(
                 fetchedList.where((conversation) {
                   if (conversation.conversationWith is Group) {

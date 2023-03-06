@@ -39,8 +39,9 @@ class CometChatMessages extends StatefulWidget {
     this.excludeMessageTypes,
     this.notifyParent,
     required this.onTapUrl,
-    this.appBarTrailingWidget,
     this.onTapMessageHeader,
+    this.trailingIcon,
+    this.onTapTrailingIcon,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
@@ -87,8 +88,9 @@ class CometChatMessages extends StatefulWidget {
   ///[notifyParent] method to tell parent message List is active
   final Function(String? id)? notifyParent;
 
-  ///[appBarTrailingWidget] to show at the end of appBar
-  final Widget? appBarTrailingWidget;
+  final Widget? trailingIcon;
+
+  final void Function(String groupId)? onTapTrailingIcon;
 
   ///[onTapMessageHeader] handles the tap on message header
   final void Function(String groupId)? onTapMessageHeader;
@@ -328,7 +330,8 @@ class CometChatMessagesState extends State<CometChatMessages>
               style: const MessageHeaderStyle(
                 background: Color(0xFF0B002C),
               ),
-              trailing: widget.appBarTrailingWidget,
+              trailingIcon: widget.trailingIcon,
+              onTapTrailingIcon: widget.onTapTrailingIcon,
               onTap: widget.onTapMessageHeader,
             )
           : PreferredSize(

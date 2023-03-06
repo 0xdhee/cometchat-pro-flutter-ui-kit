@@ -36,8 +36,9 @@ class CometChatMessageHeader extends StatefulWidget
     this.theme,
     this.avatarConfiguration,
     this.statusIndicatorConfiguration,
-    this.trailing,
+    this.trailingIcon,
     this.onTap,
+    this.onTapTrailingIcon,
   }) : super(key: key);
 
   ///[user] user object if conversation with is User
@@ -67,11 +68,11 @@ class CometChatMessageHeader extends StatefulWidget
   ///[statusIndicatorConfiguration] set configuration property for [CometChatStatusIndicator] used inside [CometChatMessageHeader]
   final StatusIndicatorConfiguration? statusIndicatorConfiguration;
 
-  ///[trailing] widget to show at the end
-  final Widget? trailing;
+  final Widget? trailingIcon;
 
-  ///[onTap] handles the tap
   final void Function(String groupId)? onTap;
+
+  final void Function(String groupId)? onTapTrailingIcon;
 
   @override
   State<CometChatMessageHeader> createState() => _CometChatMessageHeaderState();
@@ -336,9 +337,19 @@ class _CometChatMessageHeaderState extends State<CometChatMessageHeader>
                   child: getListItem(_theme),
                 ),
               ),
-              if (widget.trailing != null) ...[
-                const SizedBox(width: 8),
-                widget.trailing!,
+              if (widget.trailingIcon != null) ...[
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 16),
+                  child: GestureDetector(
+                    onTap: () {
+                      if (widget.onTapTrailingIcon != null &&
+                          widget.group != null) {
+                        widget.onTapTrailingIcon!(widget.group!);
+                      }
+                    },
+                    child: widget.trailingIcon!,
+                  ),
+                ),
               ],
             ],
           ),

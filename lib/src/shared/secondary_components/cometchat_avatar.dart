@@ -103,6 +103,7 @@ class CometChatAvatar extends StatelessWidget {
                 BorderRadius.all(Radius.circular(cornerRadius ?? 100.0)),
             border: border,
           ),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
 
           //--------on image url null or image url is not valid then show text--------
           child: _url.isNotEmpty

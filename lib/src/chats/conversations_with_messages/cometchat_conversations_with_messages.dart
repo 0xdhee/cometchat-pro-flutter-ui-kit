@@ -26,6 +26,8 @@ class CometChatConversationsWithMessages extends StatefulWidget {
     this.physics,
     this.shrinkWrap = false,
     this.groupTags,
+    this.trailingIcon,
+    this.onTapTrailingIcon,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
@@ -51,6 +53,10 @@ class CometChatConversationsWithMessages extends StatefulWidget {
   final ScrollPhysics? physics;
 
   final Set<String>? groupTags;
+
+  final Widget? trailingIcon;
+
+  final void Function(String groupId)? onTapTrailingIcon;
 
   @override
   State<CometChatConversationsWithMessages> createState() =>
@@ -110,7 +116,8 @@ class CometChatConversationsWithMessagesState
                 widget.messageConfiguration.excludeMessageTypes,
             stateCallBack: messageStateCallBack,
             notifyParent: changeActiveId,
-            appBarTrailingWidget: widget.appBarTrailingWidget,
+            trailingIcon: widget.trailingIcon,
+            onTapTrailingIcon: widget.onTapTrailingIcon,
             onTapMessageHeader: widget.onTapMessageHeader,
           ),
         ));
