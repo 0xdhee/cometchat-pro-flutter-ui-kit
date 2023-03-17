@@ -339,7 +339,7 @@ class _CometChatMessageHeaderState extends State<CometChatMessageHeader>
               ),
               if (widget.trailingIcon != null) ...[
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 16),
+                  padding: const EdgeInsets.only(left: 8),
                   child: GestureDetector(
                     onTap: () {
                       if (widget.onTapTrailingIcon != null &&
