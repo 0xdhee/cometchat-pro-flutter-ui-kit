@@ -209,6 +209,8 @@ class CometChatConversationListItem extends StatelessWidget {
                 fontWeight: _theme.typography.name.fontWeight,
                 fontSize: _theme.typography.name.fontSize,
                 fontFamily: _theme.typography.name.fontFamily),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       );
     }
   }
