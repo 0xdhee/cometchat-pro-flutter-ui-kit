@@ -285,20 +285,17 @@ class _CometChatMessageHeaderState extends State<CometChatMessageHeader>
 
   Widget getBackButton(BuildContext context, CometChatTheme _theme) {
     if (widget.showBackButton) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 20.0),
-        child: widget.backButton ??
-            GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Image.asset(
-                "assets/icons/back.png",
-                package: UIConstants.packageName,
-                color: _theme.palette.getAccent(),
-              ),
+      return widget.backButton ??
+          GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Image.asset(
+              "assets/icons/back.png",
+              package: UIConstants.packageName,
+              color: _theme.palette.getAccent(),
             ),
-      );
+          );
     } else {
       return const SizedBox(
         height: 0,
