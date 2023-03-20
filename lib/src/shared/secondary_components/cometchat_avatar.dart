@@ -107,17 +107,20 @@ class CometChatAvatar extends StatelessWidget {
 
           //--------on image url null or image url is not valid then show text--------
           child: _url.isNotEmpty
-              ? Image.network(_url,
+              ? Image.network(
+                  _url,
                   errorBuilder: (context, object, stackTrace) {
-                  return Center(
-                    child: Text(_text,
-                        style: nameTextStyle ??
-                            const TextStyle(
-                                fontSize: 17.0,
-                                color: Color(0xffFFFFFF),
-                                fontWeight: FontWeight.w500)),
-                  );
-                })
+                    return Center(
+                      child: Text(_text,
+                          style: nameTextStyle ??
+                              const TextStyle(
+                                  fontSize: 17.0,
+                                  color: Color(0xffFFFFFF),
+                                  fontWeight: FontWeight.w500)),
+                    );
+                  },
+                  fit: BoxFit.cover,
+                )
               : Center(
                   child: Text(_text,
                       style: nameTextStyle ??
