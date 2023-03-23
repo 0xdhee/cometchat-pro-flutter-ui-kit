@@ -39,6 +39,8 @@ class CometChatMessages extends StatefulWidget {
     this.excludeMessageTypes,
     this.notifyParent,
     required this.onTapUrl,
+    required this.onSendMessageClick,
+    required this.onAddMediaClick,
     this.onTapMessageHeader,
     this.trailingIcon,
     this.onTapTrailingIcon,
@@ -46,6 +48,8 @@ class CometChatMessages extends StatefulWidget {
 
   ///[onTapUrl] handle url tap inside message bubble
   final Function(String) onTapUrl;
+  final Function(String guid, String messageType) onSendMessageClick;
+  final Function(String guid, String mediaType) onAddMediaClick;
 
   ///[onTapUrl] handle url tap inside message bubble
   final bool showAppBar;
@@ -246,6 +250,8 @@ class CometChatMessagesState extends State<CometChatMessages>
   Widget getMessageList() {
     return CometChatMessageList(
       onTapUrl: widget.onTapUrl,
+      onAddMediaClick: widget.onAddMediaClick,
+      onSendMessageClick: widget.onSendMessageClick,
       user: widget.user,
       group: widget.group,
       theme: widget.theme,
@@ -289,6 +295,8 @@ class CometChatMessagesState extends State<CometChatMessages>
 
   Widget getMessageComposer() {
     return CometChatMessageComposer(
+      onAddMediaClick: widget.onAddMediaClick,
+      onSendMessageClick: widget.onSendMessageClick,
       user: widget.user,
       group: widget.group,
       theme: widget.theme,

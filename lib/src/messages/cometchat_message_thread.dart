@@ -9,10 +9,14 @@ class CometChatMessageThread extends StatefulWidget {
     this.user,
     this.group,
     required this.onTapUrl,
+    required this.onAddMediaClick,
+    required this.onSendMessageClick,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
   final Function(String) onTapUrl;
+  final Function(String guid, String mediaType) onAddMediaClick;
+  final Function(String guid, String messageType) onSendMessageClick;
 
   final BaseMessage message;
 
@@ -101,6 +105,8 @@ class _CometChatMessageThreadState extends State<CometChatMessageThread>
 
   Widget getMessageComposer() {
     return CometChatMessageComposer(
+      onAddMediaClick: widget.onAddMediaClick,
+      onSendMessageClick: widget.onSendMessageClick,
       user: widget.user,
       group: widget.group,
       stateCallBack: composerStateCallBack,
@@ -111,6 +117,8 @@ class _CometChatMessageThreadState extends State<CometChatMessageThread>
   Widget getMessageList() {
     return CometChatMessageList(
       onTapUrl: widget.onTapUrl,
+      onAddMediaClick: widget.onAddMediaClick,
+      onSendMessageClick: widget.onSendMessageClick,
       stateCallBack: messageListStateCallBack,
       threadParentMessageId: widget.message.id,
       user: widget.user,
@@ -150,6 +158,8 @@ class _CometChatMessageThreadState extends State<CometChatMessageThread>
           children: [
             CometChatMessageBubble(
                 onTapUrl: widget.onTapUrl,
+                onSendMessageClick: widget.onSendMessageClick,
+                onAddMediaClick: widget.onAddMediaClick,
                 messageObject: widget.message,
                 alignment: BubbleAlignment.left,
                 threadReplies: false,

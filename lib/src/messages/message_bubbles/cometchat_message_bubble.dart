@@ -68,10 +68,14 @@ class CometChatMessageBubble extends StatelessWidget {
     this.receiverGroupId,
     this.customView,
     required this.onTapUrl,
+    required this.onAddMediaClick,
+    required this.onSendMessageClick,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
   final Function(String) onTapUrl;
+  final Function(String guid, String mediaType) onAddMediaClick;
+  final Function(String guid, String messageType) onSendMessageClick;
 
   ///[messageBubbleData] message bubble data
   final MessageInputData messageInputData;
@@ -721,6 +725,8 @@ class CometChatMessageBubble extends StatelessWidget {
               MaterialPageRoute(
                   builder: (context) => CometChatMessageThread(
                         onTapUrl: onTapUrl,
+                        onAddMediaClick: onAddMediaClick,
+                        onSendMessageClick: onSendMessageClick,
                         message: messageObject,
                         theme: _theme,
                         group: receiverGroupId,

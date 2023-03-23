@@ -21,10 +21,14 @@ class CometChatGroupWithMessages extends StatefulWidget {
     this.groupsConfiguration = const GroupsConfiguration(),
     this.messageConfiguration = const MessageConfiguration(),
     required this.onTapUrl,
+    required this.onAddMediaClick,
+    required this.onSendMessageClick,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
   final Function(String) onTapUrl;
+  final Function(String guid, String mediaType) onAddMediaClick;
+  final Function(String guid, String messageType) onSendMessageClick;
 
   ///[theme] parameter used to pass custom theme to this module
   final CometChatTheme? theme;
@@ -83,6 +87,8 @@ class _CometChatGroupWithMessagesState extends State<CometChatGroupWithMessages>
         MaterialPageRoute(
             builder: (context) => CometChatMessages(
                   onTapUrl: widget.onTapUrl,
+                  onAddMediaClick: widget.onAddMediaClick,
+                  onSendMessageClick: widget.onSendMessageClick,
                   group: group.guid,
                   theme: widget.theme,
                   enableTypingIndicator:

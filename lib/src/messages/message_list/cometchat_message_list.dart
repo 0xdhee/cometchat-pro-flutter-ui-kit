@@ -80,10 +80,14 @@ class CometChatMessageList extends StatefulWidget {
     this.style = const MessageListStyle(),
     this.notifyParent,
     required this.onTapUrl,
+    required this.onAddMediaClick,
+    required this.onSendMessageClick,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
   final Function(String) onTapUrl;
+  final Function(String guid, String mediaType) onAddMediaClick;
+  final Function(String guid, String messageType) onSendMessageClick;
 
   ///[user] user uid for user message list
   final String? user;
@@ -463,7 +467,8 @@ class CometChatMessageListState extends State<CometChatMessageList>
           String _error = Utils.getErrorTranslatedText(context, e.code);
           showCometChatConfirmDialog(
               context: context,
-              messageText: Text(widget.errorText ?? _error, style: TextStyle(
+              messageText: Text(widget.errorText ?? _error,
+                  style: TextStyle(
                       fontSize: theme.typography.text2.fontSize,
                       fontWeight: theme.typography.text2.fontWeight,
                       color: theme.palette.getAccent())),
@@ -717,6 +722,8 @@ class CometChatMessageListState extends State<CometChatMessageList>
         MaterialPageRoute(
             builder: (context) => CometChatMessageThread(
                   onTapUrl: widget.onTapUrl,
+                  onAddMediaClick: widget.onAddMediaClick,
+                  onSendMessageClick: widget.onSendMessageClick,
                   message: message,
                   theme: theme,
                   group: widget.group,
@@ -1095,6 +1102,8 @@ class CometChatMessageListState extends State<CometChatMessageList>
       },
       child: CometChatMessageBubble(
         onTapUrl: widget.onTapUrl,
+        onSendMessageClick: widget.onSendMessageClick,
+        onAddMediaClick: widget.onAddMediaClick,
         customView: _templateMapWithView[messageObject.type],
         messageObject: messageObject,
         loggedInUserId: loggedInUser?.uid ?? '',

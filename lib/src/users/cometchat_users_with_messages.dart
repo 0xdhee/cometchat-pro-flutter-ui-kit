@@ -28,10 +28,14 @@ class CometChatUsersWithMessages extends StatefulWidget {
     this.usersConfiguration = const UsersConfiguration(),
     this.messageConfiguration = const MessageConfiguration(),
     required this.onTapUrl,
+    required this.onSendMessageClick,
+    required this.onAddMediaClick,
   }) : super(key: key);
 
   ///[onTapUrl] handle url tap inside message bubble
   final Function(String) onTapUrl;
+  final Function(String guid, String messageType) onSendMessageClick;
+  final Function(String guid, String mediaType) onAddMediaClick;
 
   ///[theme] can pass custom theme
   final CometChatTheme? theme;
@@ -70,6 +74,8 @@ class _CometChatUsersWithMessagesState extends State<CometChatUsersWithMessages>
         MaterialPageRoute(
             builder: (context) => CometChatMessages(
                   onTapUrl: widget.onTapUrl,
+                  onAddMediaClick: widget.onAddMediaClick,
+                  onSendMessageClick: widget.onSendMessageClick,
                   user: user.uid,
                   theme: widget.theme,
                   enableTypingIndicator:

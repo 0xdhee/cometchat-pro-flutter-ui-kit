@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../../../flutter_chat_ui_kit.dart';
@@ -17,6 +19,9 @@ class CometChatConversationsWithMessages extends StatefulWidget {
   const CometChatConversationsWithMessages({
     Key? key,
     required this.onTapUrl,
+    required this.onTapItem,
+    required this.onAddMediaClick,
+    required this.onSendMessageClick,
     this.theme,
     this.conversationConfigurations = const ConversationConfigurations(),
     this.messageConfiguration = const MessageConfiguration(),
@@ -32,6 +37,9 @@ class CometChatConversationsWithMessages extends StatefulWidget {
 
   ///[onTapUrl] handle url tap inside message bubble
   final Function(String) onTapUrl;
+  final Function(String guid) onTapItem;
+  final Function(String guid, String mediaType) onAddMediaClick;
+  final Function(String guid, String messageType) onSendMessageClick;
 
   final CometChatTheme? theme;
 
@@ -89,13 +97,17 @@ class CometChatConversationsWithMessagesState
     } else if (conversation.conversationType == ReceiverTypeConstants.group) {
       _groupId = (conversation.conversationWith as Group).guid;
     }
-
+    if (conversation.conversationWith is Group) {
+      widget.onTapItem((conversation.conversationWith as Group).guid);
+    }
     Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => CometChatMessages(
             showAppBar: true,
             onTapUrl: widget.onTapUrl,
+            onAddMediaClick: widget.onAddMediaClick,
+            onSendMessageClick: widget.onSendMessageClick,
             user: _userId,
             group: _groupId,
             theme: widget.theme,

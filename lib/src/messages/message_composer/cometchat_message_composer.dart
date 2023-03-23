@@ -45,6 +45,8 @@ enum PreviewMessageMode { edit, reply, none }
 class CometChatMessageComposer extends StatefulWidget {
   const CometChatMessageComposer(
       {Key? key,
+      required this.onSendMessageClick,
+      required this.onAddMediaClick,
       this.user,
       this.group,
       this.style = const MessageComposerStyle(),
@@ -64,6 +66,9 @@ class CometChatMessageComposer extends StatefulWidget {
       this.customOutgoingMessageSound,
       this.excludeMessageTypes})
       : super(key: key);
+
+  final Function(String guid, String messageType) onSendMessageClick;
+  final Function(String guid, String mediaType) onAddMediaClick;
 
   ///[user] user id
   final String? user;
@@ -639,7 +644,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
     if (item == null) {
       return;
     }
-
+    widget.onAddMediaClick(widget.group ?? '', item.title);
     for (var messageType in _messageTypes) {
       if (messageType.type == item.id && messageType.onActionClick != null) {
         messageType.onActionClick!(widget.user, widget.group);
@@ -680,6 +685,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
     if (_pickedFile != null && _type != null) {
       debugPrint(_pickedFile.path);
       sendMediaMessage(pickedFile: _pickedFile, messageType: _type);
+      widget.onSendMessageClick(widget.group ?? '', _type);
     }
   }
 
@@ -702,6 +708,7 @@ class CometChatMessageComposerState extends State<CometChatMessageComposer> {
           onPressed: widget.onSendButtonClick ??
               () {
                 if (textEditingController.text.trim().isNotEmpty) {
+                  widget.onSendMessageClick(widget.group ?? '', 'text');
                   if (previewMessageMode == PreviewMessageMode.none) {
                     sendTextMessage();
                   } else if (previewMessageMode == PreviewMessageMode.edit) {
