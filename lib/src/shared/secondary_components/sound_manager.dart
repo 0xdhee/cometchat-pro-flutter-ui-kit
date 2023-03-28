@@ -27,9 +27,9 @@ class SoundManager {
         // }
       }
     }
-
-    await UIConstants.channel.invokeMethod("playCustomSound",
-        {'assetAudioPath': _soundPath, 'package': packageName});
+    // TODO: Configure in next phase
+    // await UIConstants.channel.invokeMethod("playCustomSound",
+    //     {'assetAudioPath': _soundPath, 'package': packageName});
   }
 
   static String _getDefaultSoundPath(Sound sound) {
