@@ -18,7 +18,7 @@ class CometChatAvatar extends StatelessWidget {
 
   ///[style] contains properties that affects the appearance of this widget
   final AvatarStyle? style;
- 
+
   @override
   Widget build(BuildContext context) {
     String _url = "";
@@ -42,8 +42,8 @@ class CometChatAvatar extends StatelessWidget {
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
-        borderRadius:
-            BorderRadius.all(Radius.circular(style?.outerBorderRadius ?? 100.0)),
+        borderRadius: BorderRadius.all(
+            Radius.circular(style?.outerBorderRadius ?? 100.0)),
         border: style?.outerViewBorder ??
             Border.all(
               color: style?.outerViewBackgroundColor ??
@@ -51,8 +51,10 @@ class CometChatAvatar extends StatelessWidget {
                   const Color(0xff141414).withOpacity(0.71),
               width: style?.outerViewWidth ?? 0,
             ),
-            gradient: style?.gradient,
-        color: style?.gradient==null? style?.background ?? const Color(0xff141414).withOpacity(0.71):null,
+        gradient: style?.gradient,
+        color: style?.gradient == null
+            ? style?.background ?? const Color(0xff141414).withOpacity(0.71)
+            : null,
       ),
       child: Padding(
         padding: EdgeInsets.all(style?.outerViewSpacing ?? 0),
@@ -65,20 +67,23 @@ class CometChatAvatar extends StatelessWidget {
                 BorderRadius.all(Radius.circular(style?.borderRadius ?? 100.0)),
             border: style?.border,
           ),
-
+          clipBehavior: Clip.antiAliasWithSaveLayer,
           //--------on image url null or image url is not valid then show text--------
           child: _url.isNotEmpty
-              ? Image.network(_url,
+              ? Image.network(
+                  _url,
                   errorBuilder: (context, object, stackTrace) {
-                  return Center(
-                    child: Text(_text,
-                        style: style?.nameTextStyle ??
-                            const TextStyle(
-                                fontSize: 17.0,
-                                color: Color(0xffFFFFFF),
-                                fontWeight: FontWeight.w500)),
-                  );
-                })
+                    return Center(
+                      child: Text(_text,
+                          style: style?.nameTextStyle ??
+                              const TextStyle(
+                                  fontSize: 17.0,
+                                  color: Color(0xffFFFFFF),
+                                  fontWeight: FontWeight.w500)),
+                    );
+                  },
+                  fit: BoxFit.cover,
+                )
               : Center(
                   child: Text(_text,
                       style: style?.nameTextStyle ??
