@@ -395,7 +395,7 @@ class _CometChatUsersState extends State<CometChatUsers> {
       builder: (CometChatUsersController value) {
         if (value.hasError == true) {
           WidgetsBinding.instance
-              ?.addPostFrameCallback((_) => _showError(value, context, _theme));
+              .addPostFrameCallback((_) => _showError(value, context, _theme));
 
           if (widget.errorStateView != null) {
             return widget.errorStateView!(context);

@@ -364,7 +364,7 @@ class CometChatGroups extends StatelessWidget {
         value.context = context;
         if (value.hasError == true) {
           WidgetsBinding.instance
-              ?.addPostFrameCallback((_) => _showError(value, context, _theme));
+              .addPostFrameCallback((_) => _showError(value, context, _theme));
 
           if (errorView != null) {
             return errorView!(context);
@@ -426,7 +426,7 @@ class CometChatGroups extends StatelessWidget {
 
     if (stateCallBack != null) {
       WidgetsBinding.instance
-          ?.addPostFrameCallback((_) => stateCallBack!(groupsController));
+          .addPostFrameCallback((_) => stateCallBack!(groupsController));
     }
 
     return CometChatListBase(

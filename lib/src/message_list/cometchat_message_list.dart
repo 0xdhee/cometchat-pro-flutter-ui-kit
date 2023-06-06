@@ -201,7 +201,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
     messageListController = CometChatMessageListController(
         customIncomingMessageSound: widget.customSoundForMessages,
         customIncomingMessageSoundPackage: widget.customSoundForMessagePackage,
-        disableSoundForMessages: widget.disableSoundForMessages ?? false,
+        disableSoundForMessages: widget.disableSoundForMessages ?? true,
         messagesBuilderProtocol: UIMessagesBuilder(messagesRequestBuilder
             // widget.messagesRequestBuilder ??
             //     (widget.user != null
@@ -819,7 +819,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
 
         if (value.hasError == true) {
           WidgetsBinding.instance
-              ?.addPostFrameCallback((_) => _showError(value, context, _theme));
+              .addPostFrameCallback((_) => _showError(value, context, _theme));
 
           if (widget.errorStateView != null) {
             return widget.errorStateView!(context);
@@ -835,6 +835,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
           return Stack(
             children: [
               ListView.builder(
+                padding: const EdgeInsets.only(top: 24, bottom: 24),
                 controller: _controller.messageListScrollController,
                 reverse: true,
                 itemCount: value.hasMoreItems

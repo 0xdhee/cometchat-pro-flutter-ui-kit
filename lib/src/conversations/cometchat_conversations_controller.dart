@@ -20,7 +20,7 @@ class CometChatConversationsController
       {required this.conversationsBuilderProtocol,
       SelectionMode? mode,
       required this.theme,
-      this.disableSoundForMessages = false,
+      this.disableSoundForMessages = true,
       this.customSoundForMessages,
       this.disableUsersPresence,
       this.disableReceipt = false,

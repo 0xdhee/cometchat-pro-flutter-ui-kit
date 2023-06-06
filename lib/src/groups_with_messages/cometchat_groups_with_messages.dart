@@ -81,12 +81,12 @@ class _CometChatGroupsWithMessagesState
             createGroupConfiguration: widget.createGroupConfiguration);
     if (widget.group != null) {
       if (widget.group?.hasJoined == true) {
-        WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           _cometChatGroupsWithMessagesController.navigateToMessagesScreen(
               group: widget.group!, context: context);
         });
       } else if (widget.group?.type == GroupTypeConstants.password) {
-        WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
           _cometChatGroupsWithMessagesController
               .navigateToJoinProtectedGroupScreen(
                   group: widget.group!, context: context);

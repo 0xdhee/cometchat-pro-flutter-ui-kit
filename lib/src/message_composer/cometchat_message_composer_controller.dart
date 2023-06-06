@@ -13,7 +13,7 @@ class CometChatMessageComposerController extends GetxController
       this.group,
       this.text,
       this.parentMessageId = 0,
-      this.disableSoundForMessages = false,
+      this.disableSoundForMessages = true,
       this.customSoundForMessage,
       this.customSoundForMessagePackage,
       this.disableTypingEvents = false,
