@@ -127,7 +127,7 @@ class _CometChatConversationsWithMessagesState
                   widget.conversationsConfiguration?.customSoundForMessages,
               disableSoundForMessages:
                   widget.conversationsConfiguration?.disableSoundForMessages ??
-                      false,
+                      true,
               disableReceipt:
                   widget.conversationsConfiguration?.disableReceipt,
               disableUsersPresence:

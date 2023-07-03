@@ -82,7 +82,7 @@ class CometChatConversationsWithMessagesController extends GetxController
             detailsConfiguration: messageConfiguration?.detailsConfiguration,
             disableSoundForMessages:
                 messageConfiguration?.disableSoundForMessages,
-            disableTyping: messageConfiguration?.disableTyping ?? false,
+            disableTyping: messageConfiguration?.disableTyping ?? true,
             hideMessageComposer:
                 messageConfiguration?.hideMessageComposer ?? false,
             hideMessageHeader: messageConfiguration?.hideMessageHeader,

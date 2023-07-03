@@ -201,7 +201,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
     messageListController = CometChatMessageListController(
         customIncomingMessageSound: widget.customSoundForMessages,
         customIncomingMessageSoundPackage: widget.customSoundForMessagePackage,
-        disableSoundForMessages: widget.disableSoundForMessages ?? false,
+        disableSoundForMessages: widget.disableSoundForMessages ?? true,
         messagesBuilderProtocol: UIMessagesBuilder(messagesRequestBuilder
             // widget.messagesRequestBuilder ??
             //     (widget.user != null

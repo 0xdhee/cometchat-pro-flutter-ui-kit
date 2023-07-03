@@ -49,7 +49,7 @@ class CometChatConversations extends StatelessWidget {
       this.activateSelection,
       this.datePattern,
       String? customSoundForMessages,
-      bool? disableSoundForMessages = false,
+      bool? disableSoundForMessages = true,
       this.typingIndicatorText,
       this.dateStyle,
       this.onBack,

@@ -21,7 +21,7 @@ class CometChatMessageListController
       this.group,
       this.customIncomingMessageSound,
       this.customIncomingMessageSoundPackage,
-      this.disableSoundForMessages = false,
+      this.disableSoundForMessages = true,
       this.hideDeletedMessage = false,
       this.scrollToBottomOnNewMessage = false,
       ScrollController? scrollController,

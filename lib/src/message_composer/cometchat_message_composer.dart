@@ -46,7 +46,7 @@ class CometChatMessageComposer extends StatelessWidget {
       this.placeholderText,
       bool hideLiveReaction = false,
       bool disableTypingEvents = false,
-      bool disableSoundForMessages = false,
+      bool disableSoundForMessages = true,
       this.parentMessageId = 0,
       String? customSoundForMessage,
       String? customSoundForMessagePackage,

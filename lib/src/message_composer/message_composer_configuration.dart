@@ -22,7 +22,7 @@ class MessageComposerConfiguration {
     this.attachmentIconURL,
     this.onSendButtonClick,
     this.theme,
-    this.disableSoundForMessages = false,
+    this.disableSoundForMessages = true,
     this.customSoundForMessage,
     this.liveReactionIconURL,
     this.customSoundForMessagePackage,
