@@ -819,7 +819,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
 
         if (value.hasError == true) {
           WidgetsBinding.instance
-              ?.addPostFrameCallback((_) => _showError(value, context, _theme));
+              .addPostFrameCallback((_) => _showError(value, context, _theme));
 
           if (widget.errorStateView != null) {
             return widget.errorStateView!(context);

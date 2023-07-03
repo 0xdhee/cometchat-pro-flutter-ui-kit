@@ -217,13 +217,12 @@ class MessagesDataSource implements DataSource {
         category: MessageCategoryConstants.message,
         contentView: (BaseMessage message, BuildContext context,
             BubbleAlignment alignment) {
-
           if (message.deletedAt != null) {
             return getDeleteMessageBubble(message, theme);
           }
 
-          return ChatConfigurator.getDataSource()
-              .getVideoMessageContentView(message as MediaMessage, context, alignment, theme);
+          return ChatConfigurator.getDataSource().getVideoMessageContentView(
+              message as MediaMessage, context, alignment, theme);
         },
         options: ChatConfigurator.getDataSource().getMessageOptions,
         bottomView: ChatConfigurator.getDataSource().getBottomView);
@@ -236,13 +235,12 @@ class MessagesDataSource implements DataSource {
         category: MessageCategoryConstants.message,
         contentView: (BaseMessage message, BuildContext context,
             BubbleAlignment alignment) {
-
           if (message.deletedAt != null) {
             return getDeleteMessageBubble(message, theme);
           }
 
-          return ChatConfigurator.getDataSource()
-              .getImageMessageContentView(message as MediaMessage, context, alignment, theme);
+          return ChatConfigurator.getDataSource().getImageMessageContentView(
+              message as MediaMessage, context, alignment, theme);
         },
         options: ChatConfigurator.getDataSource().getMessageOptions,
         bottomView: ChatConfigurator.getDataSource().getBottomView);
@@ -278,8 +276,8 @@ class MessagesDataSource implements DataSource {
             return getDeleteMessageBubble(message, theme);
           }
 
-          return ChatConfigurator.getDataSource()
-              .getFileMessageContentView(message as MediaMessage, context, alignment, theme);
+          return ChatConfigurator.getDataSource().getFileMessageContentView(
+              message as MediaMessage, context, alignment, theme);
         },
         options: ChatConfigurator.getDataSource().getMessageOptions,
         bottomView: ChatConfigurator.getDataSource().getBottomView);
@@ -492,7 +490,6 @@ class MessagesDataSource implements DataSource {
     ];
   }
 
-  
   String addList() {
     return "<Message Utils>";
   }
@@ -505,7 +502,7 @@ class MessagesDataSource implements DataSource {
   @override
   Widget getAuxiliaryOptions(User? user, Group? group, BuildContext context,
       Map<String, dynamic>? id) {
-    return SizedBox();
+    return const SizedBox();
   }
 
   @override

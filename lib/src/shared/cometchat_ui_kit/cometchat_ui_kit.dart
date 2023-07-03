@@ -120,7 +120,14 @@ class CometChatUIKit {
       {Function(Map<String, Map<String, int>> message)? onSuccess,
       Function(CometChatException excep)? onError}) async {
     if (!checkAuthSettings(onError)) return;
-    await CometChat.logout(onSuccess: onSuccess, onError: onError);
+    await CometChat.logout(
+      onSuccess: (user) {
+        //'Comet Chat logOut success:- $user'
+      },
+      onError: (excep) {
+        //excep
+      },
+    );
     ChatConfigurator.init();
   }
 

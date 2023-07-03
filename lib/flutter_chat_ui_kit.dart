@@ -42,8 +42,6 @@ export 'src/cometchat_ui/cometchat_ui.dart';
 export 'src/cometchat_ui/tab_item.dart';
 export 'src/cometchat_ui/ui_style.dart';
 
-export 'l10n/translations.dart';
-
 //banned members
 export 'src/banned_members/cometchat_banned_members.dart';
 export 'src/banned_members/cometchat_banned_members_controller.dart';
@@ -271,10 +269,3 @@ export 'src/shared/framework/data_source_decorator.dart';
 export 'src/shared/framework/data_source.dart';
 export 'src/shared/framework/chat_configurator.dart';
 export 'src/shared/framework/extensions_data_source.dart';
-
-
-//UI kits
-export 'src/shared/cometchat_ui_kit/authentication_settings.dart';
-export 'src/shared/cometchat_ui_kit/cometchat_ui_kit.dart';
-export 'src/shared/cometchat_ui_kit/cometchat_ui_kit_helper.dart';
-

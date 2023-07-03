@@ -413,7 +413,7 @@ class CometChatBannedMembers extends StatelessWidget {
       builder: (CometChatBannedMembersController value) {
         if (value.hasError == true) {
           WidgetsBinding.instance
-              ?.addPostFrameCallback((_) => _showError(value, context, _theme));
+              .addPostFrameCallback((_) => _showError(value, context, _theme));
 
           if (errorView != null) {
             return errorView!(context);
@@ -478,7 +478,7 @@ class CometChatBannedMembers extends StatelessWidget {
     CometChatTheme _theme = theme ?? cometChatTheme;
 
     if (stateCallBack != null) {
-      WidgetsBinding.instance?.addPostFrameCallback(
+      WidgetsBinding.instance.addPostFrameCallback(
           (_) => stateCallBack!(bannedMembersController));
     }
 

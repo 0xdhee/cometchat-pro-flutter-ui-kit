@@ -38,7 +38,9 @@ class _VideoPlayerState extends State<VideoPlayer> {
 
   initializeVideo() async {
     try {
-      _controller = VideoPlayerController.network(widget.videoUrl);
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoUrl),
+      );
       await _controller!.initialize();
       _chewieController = ChewieController(
           videoPlayerController: _controller!,

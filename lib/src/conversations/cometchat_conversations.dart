@@ -447,7 +447,7 @@ class CometChatConversations extends StatelessWidget {
         value.context = context;
         if (value.hasError == true) {
           WidgetsBinding.instance
-              ?.addPostFrameCallback((_) => _showError(value, context, _theme));
+              .addPostFrameCallback((_) => _showError(value, context, _theme));
 
           if (errorView != null) {
             return errorView!(context);
@@ -510,7 +510,7 @@ class CometChatConversations extends StatelessWidget {
     CometChatTheme _theme = theme ?? cometChatTheme;
 
     if (stateCallBack != null) {
-      WidgetsBinding.instance?.addPostFrameCallback(
+      WidgetsBinding.instance.addPostFrameCallback(
           (_) => stateCallBack!(conversationsController));
     }
 

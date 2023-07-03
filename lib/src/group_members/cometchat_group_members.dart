@@ -380,7 +380,7 @@ class CometChatGroupMembers extends StatelessWidget {
             state.controller?.onClose(),
         builder: (CometChatGroupMembersController value) {
           if (value.hasError == true) {
-            WidgetsBinding.instance?.addPostFrameCallback(
+            WidgetsBinding.instance.addPostFrameCallback(
                 (_) => _showError(value, context, _theme));
 
             if (errorStateView != null) {
@@ -492,7 +492,7 @@ class CometChatGroupMembers extends StatelessWidget {
 
     if (stateCallBack != null) {
       WidgetsBinding.instance
-          ?.addPostFrameCallback((_) => stateCallBack!(groupMembersController));
+          .addPostFrameCallback((_) => stateCallBack!(groupMembersController));
     }
 
     return CometChatListBase(

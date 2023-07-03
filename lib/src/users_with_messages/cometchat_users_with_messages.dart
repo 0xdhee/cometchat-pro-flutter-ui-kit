@@ -76,7 +76,7 @@ class _CometChatUsersWithMessagesState
             messageConfiguration: widget.messageConfiguration,
             theme: widget.theme);
     if (widget.user != null && widget.user?.hasBlockedMe==false) {
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         _cometChatUsersWithMessagesController.navigateToMessagesScreen(user:widget.user,context: context);
       });
     }

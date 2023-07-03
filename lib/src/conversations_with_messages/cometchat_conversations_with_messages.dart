@@ -83,7 +83,7 @@ class _CometChatConversationsWithMessagesState
             theme: widget.theme,
             messageConfiguration: widget.messageConfiguration);
     if (widget.user != null || widget.group != null) {
-      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         _cometChatConversationsWithMessagesController.navigateToMessagesScreen(
             user: widget.user, group: widget.group, context: context);
       });
