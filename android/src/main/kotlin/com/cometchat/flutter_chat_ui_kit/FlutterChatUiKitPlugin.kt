@@ -219,15 +219,15 @@ class FlutterChatUiKitPlugin: FlutterPlugin, MethodCallHandler, ActivityAware, P
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
-    TODO("Not yet implemented")
+    Log.i("Flutter Chat UI Kit", "onDetachedFromActivityForConfigChanges")
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
+    Log.i("Flutter Chat UI Kit", "onReattachedToActivityForConfigChanges")
   }
 
   override fun onDetachedFromActivity() {
-    TODO("Not yet implemented")
+    Log.i("Flutter Chat UI Kit", "onDetachedFromActivity")
   }
 
 //  private fun playDefaultSound(call: MethodCall, result: Result) {
