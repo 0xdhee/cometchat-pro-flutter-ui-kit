@@ -108,6 +108,8 @@ class CometChatListItem extends StatelessWidget {
               fontWeight: _theme.typography.name.fontWeight,
               fontSize: _theme.typography.name.fontSize,
               fontFamily: _theme.typography.name.fontFamily),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 
@@ -127,7 +129,9 @@ class CometChatListItem extends StatelessWidget {
             height: style.height ?? 73,
             width: style.width,
             decoration: BoxDecoration(
-                color: style.gradient==null? style.background ?? _theme.palette.getBackground():null,
+                color: style.gradient == null
+                    ? style.background ?? _theme.palette.getBackground()
+                    : null,
                 gradient: style.gradient,
                 border: style.border,
                 borderRadius: BorderRadius.circular(style.borderRadius ?? 0)),
