@@ -24,6 +24,10 @@ class CometChatMessageHeader extends StatelessWidget
     implements PreferredSizeWidget {
   const CometChatMessageHeader(
       {Key? key,
+      this.trailingIcon,
+      this.onTapTrailingIcon,
+      this.onTapChatPageHeader,
+      this.hideTailView = false,
       this.backButton,
       this.messageHeaderStyle = const MessageHeaderStyle(),
       this.group,
@@ -46,6 +50,18 @@ class CometChatMessageHeader extends StatelessWidget
         assert(user == null || group == null,
             "Only one of user or group should be passed"),
         super(key: key);
+
+  ///[header trailing Icon]
+  final Widget? trailingIcon;
+
+  ///[header trailing Icon click]
+  final void Function(String groupId)? onTapTrailingIcon;
+
+  ///[on Tap chat page Header] handles the tap on chat page header
+  final void Function(String)? onTapChatPageHeader;
+
+  ///[hide TailView]
+  final bool hideTailView;
 
   ///[backButton] used to set back button widget
   final WidgetBuilder? backButton;
@@ -155,8 +171,7 @@ class CometChatMessageHeader extends StatelessWidget
         );
       }
 
-      return Padding(
-          padding: const EdgeInsets.only(left: 20.0), child: _backButton);
+      return _backButton;
     } else {
       return const SizedBox(
         height: 0,
@@ -308,7 +323,11 @@ class CometChatMessageHeader extends StatelessWidget
     }
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        if (onTapChatPageHeader != null && group != null) {
+          onTapChatPageHeader!(group?.guid ?? '');
+        }
+      },
       child: CometChatListItem(
         avatarName: _avatarName,
         avatarURL: _avatarUrl,
@@ -321,7 +340,7 @@ class CometChatMessageHeader extends StatelessWidget
             statusIndicatorStyle ?? const StatusIndicatorStyle(),
         theme: _theme,
         hideSeparator: true,
-        tailView: _tailView,
+        tailView: hideTailView ? null : _tailView,
         style: listItemStyle ??
             ListItemStyle(
                 background: Colors.transparent,
@@ -342,27 +361,44 @@ class CometChatMessageHeader extends StatelessWidget
         CometChatMessageHeaderController(
             userObject: user, groupObject: group, disableTyping: disableTyping);
 
-    return Container(
-      height: messageHeaderStyle.height ?? 56,
-      width: messageHeaderStyle.width ?? MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
+    return SafeArea(
+      child: Container(
+        height: messageHeaderStyle.height ?? 56,
+        width: messageHeaderStyle.width ?? MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
           color: messageHeaderStyle.gradient == null
               ? messageHeaderStyle.background ?? _theme.palette.getBackground()
               : null,
           border: messageHeaderStyle.border,
           gradient: messageHeaderStyle.gradient,
           borderRadius:
-              BorderRadius.circular(messageHeaderStyle.borderRadius ?? 0)),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          getBackButton(context, _theme),
-          Expanded(
+              BorderRadius.circular(messageHeaderStyle.borderRadius ?? 0),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            getBackButton(context, _theme),
+            Expanded(
               child: Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 16),
-            child: _getBody(controller, context, _theme),
-          ))
-        ],
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                child: _getBody(controller, context, _theme),
+              ),
+            ),
+            if (trailingIcon != null) ...[
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: GestureDetector(
+                  onTap: () {
+                    if (onTapTrailingIcon != null && group != null) {
+                      onTapTrailingIcon!(group?.guid ?? '');
+                    }
+                  },
+                  child: trailingIcon,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

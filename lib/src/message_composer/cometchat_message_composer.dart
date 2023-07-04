@@ -137,45 +137,45 @@ class CometChatMessageComposer extends StatelessWidget {
 
   final int parentMessageId;
 
-  late Map<String, dynamic> composerId = {};
+  final Map<String, dynamic> composerId = {};
 
   Widget _getSendButton(
       CometChatTheme _theme, CometChatMessageComposerController value) {
-    if (value.textEditingController.text.isEmpty &&
-        value.hideLiveReaction != true) {
-      return IconButton(
-        padding: const EdgeInsets.all(0),
-        constraints: const BoxConstraints(),
-        icon: liveReactionIcon ??
-            Image.asset(AssetConstants.heart,
-                package: UIConstants.packageName,
-                color: _theme.palette.getError()),
-        onPressed: () async {
-          if (value.hideLiveReaction != true) {
-            try {
-              value.sendLiveReaction();
-            } catch (_) {}
-            await Future.delayed(
-                const Duration(milliseconds: LiveReactionConstants.timeout));
-          }
-        },
-      );
-    } else {
-      return sendButtonView ??
-          IconButton(
-              padding: const EdgeInsets.all(0),
-              constraints: const BoxConstraints(),
-              icon: messageComposerStyle.sendButtonIcon ??
-                  Image.asset(
-                    AssetConstants.send,
-                    package: UIConstants.packageName,
-                    color: value.textEditingController.text.isEmpty
-                        ? _theme.palette.getAccent400()
-                        : messageComposerStyle.sendButtonIconTint ??
-                            _theme.palette.getPrimary(),
-                  ),
-              onPressed: onSendButtonClick ?? value.onSendButtonClick);
-    }
+    // if (value.textEditingController.text.isEmpty &&
+    //     value.hideLiveReaction != true) {
+    //   return IconButton(
+    //     padding: const EdgeInsets.all(0),
+    //     constraints: const BoxConstraints(),
+    //     icon: liveReactionIcon ??
+    //         Image.asset(AssetConstants.heart,
+    //             package: UIConstants.packageName,
+    //             color: _theme.palette.getError()),
+    //     onPressed: () async {
+    //       if (value.hideLiveReaction != true) {
+    //         try {
+    //           value.sendLiveReaction();
+    //         } catch (_) {}
+    //         await Future.delayed(
+    //             const Duration(milliseconds: LiveReactionConstants.timeout));
+    //       }
+    //     },
+    //   );
+    // } else {
+    return sendButtonView ??
+        IconButton(
+            padding: const EdgeInsets.all(0),
+            constraints: const BoxConstraints(),
+            icon: messageComposerStyle.sendButtonIcon ??
+                Image.asset(
+                  AssetConstants.send,
+                  package: UIConstants.packageName,
+                  color: value.textEditingController.text.isEmpty
+                      ? _theme.palette.getAccent400()
+                      : messageComposerStyle.sendButtonIconTint ??
+                          _theme.palette.getPrimary(),
+                ),
+            onPressed: onSendButtonClick ?? value.onSendButtonClick);
+    // }
   }
 
   @override
@@ -188,15 +188,19 @@ class CometChatMessageComposer extends StatelessWidget {
       child: Column(
         children: [
           Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 12,
+                horizontal: 8,
+              ),
               decoration: BoxDecoration(
                   color: messageComposerStyle.gradient == null
                       ? messageComposerStyle.background ??
                           _theme.palette.getBackground()
                       : null,
                   gradient: messageComposerStyle.gradient),
-              padding: messageComposerStyle.contentPadding ??
-                  const EdgeInsets.only(
-                      left: 16, right: 16, top: 10, bottom: 10),
+              // padding: messageComposerStyle.contentPadding ??
+              //     const EdgeInsets.only(
+              //         left: 16, right: 16, top: 10, bottom: 10),
               child: GetBuilder(
                   init: cometChatMessageComposerController,
                   tag: cometChatMessageComposerController.tag,
@@ -245,8 +249,8 @@ class CometChatMessageComposer extends StatelessWidget {
                                         width: 3))),
                           ),
 
-                        //-----
-                        Container(
+                        //----- Edit UI
+                        /*Container(
                           decoration: BoxDecoration(
                             border: messageComposerStyle.border,
                             borderRadius: BorderRadius.all(Radius.circular(
@@ -334,6 +338,66 @@ class CometChatMessageComposer extends StatelessWidget {
                               if (value.footer != null) value.footer!,
                             ],
                           ),
+                        ),*/
+                        CometChatMessageInput(
+                          text: text,
+                          textEditingController: value.textEditingController,
+                          placeholderText: placeholderText,
+                          maxLine: maxLine,
+                          onChange: onChange ?? value.onChange,
+                          primaryButtonView: _getSendButton(_theme, value),
+                          secondaryButtonView:
+                              // secondaryButtonView != null ? secondaryButtonView!(user: value.user, group: value.group) :
+                              IconButton(
+                                  // padding: const EdgeInsets.all(0),
+                                  constraints: const BoxConstraints(),
+                                  icon: attachmentIcon ??
+                                      Image.asset(
+                                        attachmentIconURL ?? AssetConstants.add,
+                                        package: UIConstants.packageName,
+                                        color: messageComposerStyle
+                                                .attachmentIconTint ??
+                                            _theme.palette.getAccent700(),
+                                      ),
+                                  onPressed: () async {
+                                    value.showBottomActionSheet(
+                                        _theme, context);
+                                  }),
+                          auxiliaryButtonsAlignment:
+                              auxiliaryButtonsAlignment ??
+                                  AuxiliaryButtonsAlignment.right,
+                          auxiliaryButtonView: // auxiliaryButtonView != null  ? auxiliaryButtonView!(user: value.user, group: value.group) :
+                              Row(
+                            children: [
+                              //-----show emoji keyboard-----
+
+                              ChatConfigurator.getDataSource()
+                                  .getAuxiliaryOptions(value.user, value.group,
+                                      context, value.composerId),
+                              IconButton(
+                                  // padding: const EdgeInsets.only(
+                                  //     right: 20),
+                                  constraints: const BoxConstraints(),
+                                  icon: Image.asset(
+                                    AssetConstants.smileys,
+                                    package: UIConstants.packageName,
+                                    color: messageComposerStyle.emojiIconTint ??
+                                        _theme.palette.getAccent700(),
+                                  ),
+                                  onPressed: () =>
+                                      value.useEmojis(context, _theme)),
+                            ],
+                          ),
+                          style: MessageInputStyle(
+                              dividerTint: messageComposerStyle.dividerTint ??
+                                  _theme.palette.getAccent500(),
+                              background:
+                                  messageComposerStyle.inputBackground ??
+                                      _theme.palette.getAccent100(),
+                              gradient: messageComposerStyle.inputGradient,
+                              textStyle: messageComposerStyle.inputTextStyle,
+                              placeholderTextStyle:
+                                  messageComposerStyle.placeholderTextStyle),
                         ),
                       ],
                     );

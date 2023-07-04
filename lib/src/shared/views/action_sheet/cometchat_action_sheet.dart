@@ -46,8 +46,8 @@ class _CometChatActionSheetState extends State<CometChatActionSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.5,
-      minChildSize: 0.5,
+      initialChildSize: 0.35,
+      minChildSize: 0.35,
       maxChildSize: 0.75,
       expand: false,
       builder: (BuildContext context, ScrollController scrollController) {
@@ -68,6 +68,9 @@ class _CometChatActionSheetState extends State<CometChatActionSheet> {
                     color: widget.iconBackground ??
                         const Color(0xff141414).withOpacity(0.08),
                     borderRadius: BorderRadius.circular(2)),
+              ),
+              const SizedBox(
+                height: 24,
               ),
               if (!(widget.isLayoutModeIconVisible == false ||
                   widget.isTitleVisible == false))

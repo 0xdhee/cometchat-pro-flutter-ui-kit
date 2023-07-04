@@ -46,7 +46,6 @@ class CometChatMessageInput extends StatefulWidget {
   ///[textEditingController] provides control of the input field
   final TextEditingController? textEditingController;
 
-
   @override
   State<CometChatMessageInput> createState() => _CometChatMessageInputState();
 }
@@ -85,7 +84,7 @@ class _CometChatMessageInputState extends State<CometChatMessageInput> {
     }
   }
 
-  @override
+  /*@override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -170,6 +169,85 @@ class _CometChatMessageInputState extends State<CometChatMessageInput> {
               ],
             ),
           )
+        ],
+      ),
+    );
+  }*/
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: widget.style?.gradient == null ? widget.style?.background : null,
+        border: widget.style?.border,
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          //-----show auxilary buttons -----
+          if (widget.auxiliaryButtonView != null)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 4,
+                bottom: 5,
+              ),
+              child: widget.auxiliaryButtonView!,
+            ),
+          //-----Textfield -----
+          Expanded(
+            child: Container(
+              padding:
+                  const EdgeInsets.only(left: 6, right: 6, bottom: 1, top: 1),
+              child: TextFormField(
+                keyboardAppearance:
+                    _theme.palette.mode == PaletteThemeModes.light
+                        ? Brightness.light
+                        : Brightness.dark,
+                style: TextStyle(
+                        color: _theme.palette.getAccent600(),
+                        fontSize: _theme.typography.body.fontSize,
+                        fontWeight: _theme.typography.body.fontWeight,
+                        fontFamily: _theme.typography.body.fontFamily)
+                    .merge(widget.style?.textStyle),
+                onChanged: widget.onChange,
+                controller: _textEditingController,
+                minLines: 1,
+                maxLines: widget.maxLine ?? 4,
+                decoration: InputDecoration(
+                  hintText: widget.placeholderText ??
+                      Translations.of(context).enter_your_message_here,
+                  hintStyle: TextStyle(
+                    color: _theme.palette.getAccent600(),
+                    fontSize: _theme.typography.body.fontSize,
+                    fontFamily: _theme.typography.body.fontFamily,
+                    fontWeight: _theme.typography.body.fontWeight,
+                  ).merge(widget.style?.placeholderTextStyle),
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                ),
+              ),
+            ),
+          ),
+          //-----show add to chat bottom sheet-----
+          if (widget.secondaryButtonView != null)
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: 5,
+              ),
+              child: widget.secondaryButtonView!,
+            ),
+          //  -----show send button-----
+          if (widget.primaryButtonView != null)
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 4,
+                bottom: 13,
+                right: 12,
+              ),
+              child: widget.primaryButtonView!,
+            ),
         ],
       ),
     );

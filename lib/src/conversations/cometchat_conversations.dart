@@ -11,6 +11,11 @@ import '../../../flutter_chat_ui_kit.dart' as cc;
 class CometChatConversations extends StatelessWidget {
   CometChatConversations(
       {Key? key,
+      required this.hideAppBar,
+      this.padding,
+      this.shrinkWrap = false,
+      this.physics,
+      this.groupIDs,
       this.conversationsProtocol,
       this.subtitleView,
       this.listItemView,
@@ -69,6 +74,21 @@ class CometChatConversations extends StatelessWidget {
             disableReceipt: disableReceipt,
             onError: onError),
         super(key: key);
+
+  ///[hideAppBar] toggle visibility of AppBar
+  final bool hideAppBar;
+
+  ///[padding] padding
+  final EdgeInsetsGeometry? padding;
+
+  ///[shrinkWrap] shrinkWrap for listview
+  final bool shrinkWrap;
+
+  ///[physics] physics for listview
+  final ScrollPhysics? physics;
+
+  ///[selected groups ids] fetch only selected groups
+  final Set<String>? groupIDs;
 
   ///property to be set internally by using passed parameters [conversationsProtocol] ,[selectionMode] ,[options]
   ///these are passed to the [CometChatConversationsController] which is responsible for the business logic
@@ -203,7 +223,6 @@ class CometChatConversations extends StatelessWidget {
 
   ///[onItemLongPress] callback triggered on pressing for long on a conversation item
   final Function(Conversation)? onItemLongPress;
-
 
   final RxBool _isSelectionOn = false.obs;
 
@@ -385,6 +404,7 @@ class CometChatConversations extends StatelessWidget {
 
   _showErrorDialog(String _errorText, BuildContext context,
       CometChatTheme _theme, CometChatConversationsController _controller) {
+    _controller.groupIDs = groupIDs;
     showCometChatConfirmDialog(
         context: context,
         messageText: Text(
@@ -424,6 +444,7 @@ class CometChatConversations extends StatelessWidget {
 
   _showError(CometChatConversationsController _controller, BuildContext context,
       CometChatTheme _theme) {
+    _controller.groupIDs = groupIDs;
     if (hideError == true) return;
     String _error;
     if (_controller.error != null && _controller.error is CometChatException) {
@@ -438,6 +459,7 @@ class CometChatConversations extends StatelessWidget {
 
   Widget _getList(CometChatConversationsController _controller,
       BuildContext context, CometChatTheme _theme) {
+    _controller.groupIDs = groupIDs;
     return GetBuilder(
       init: _controller,
       global: false,
@@ -461,6 +483,8 @@ class CometChatConversations extends StatelessWidget {
           return _getNoConversationIndicator(context, _theme);
         } else {
           return ListView.builder(
+            shrinkWrap: shrinkWrap,
+            physics: physics,
             controller: controller,
             itemCount:
                 value.hasMoreItems ? value.list.length + 1 : value.list.length,
@@ -510,36 +534,42 @@ class CometChatConversations extends StatelessWidget {
     CometChatTheme _theme = theme ?? cometChatTheme;
 
     if (stateCallBack != null) {
-      WidgetsBinding.instance.addPostFrameCallback(
-          (_) => stateCallBack!(conversationsController));
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => stateCallBack!(conversationsController));
     }
 
-    return CometChatListBase(
-        title: title ?? cc.Translations.of(context).chats,
-        hideSearch: true,
-        backIcon: backButton,
-        showBackButton: showBackButton,
-        onBack: onBack,
-        theme: theme,
-        menuOptions: [
-          if (appBarOptions != null && appBarOptions!.isNotEmpty)
-            ...appBarOptions!,
-          Obx(
-            () => getSelectionWidget(conversationsController, _theme),
+    return hideAppBar
+        ? Container(
+            padding: padding ?? const EdgeInsets.only(left: 16, right: 16),
+            child: _getList(conversationsController, context, _theme),
           )
-        ],
-        style: ListBaseStyle(
-            background: conversationsStyle.gradient == null
-                ? conversationsStyle.background
-                : Colors.transparent,
-            titleStyle: conversationsStyle.titleStyle,
-            gradient: conversationsStyle.gradient,
-            height: conversationsStyle.height,
-            width: conversationsStyle.width,
-            backIconTint: conversationsStyle.backIconTint,
-            border: conversationsStyle.border,
-            borderRadius: conversationsStyle.borderRadius),
-        container: _getList(conversationsController, context, _theme));
+        : CometChatListBase(
+            title: title ?? cc.Translations.of(context).chats,
+            hideSearch: true,
+            backIcon: backButton,
+            showBackButton: showBackButton,
+            onBack: onBack,
+            theme: theme,
+            menuOptions: [
+              if (appBarOptions != null && appBarOptions!.isNotEmpty)
+                ...appBarOptions!,
+              Obx(
+                () => getSelectionWidget(conversationsController, _theme),
+              )
+            ],
+            style: ListBaseStyle(
+                background: conversationsStyle.gradient == null
+                    ? conversationsStyle.background
+                    : Colors.transparent,
+                titleStyle: conversationsStyle.titleStyle,
+                gradient: conversationsStyle.gradient,
+                height: conversationsStyle.height,
+                width: conversationsStyle.width,
+                backIconTint: conversationsStyle.backIconTint,
+                border: conversationsStyle.border,
+                borderRadius: conversationsStyle.borderRadius),
+            container: _getList(conversationsController, context, _theme),
+          );
   }
 
 //----------- default subtitle
@@ -610,13 +640,15 @@ class CometChatConversations extends StatelessWidget {
               Image.asset(
                 AssetConstants.messageReceived,
                 package: UIConstants.packageName,
-                color: receiptStyle?.deliveredIconTint ?? _theme.palette.getAccent(),
+                color: receiptStyle?.deliveredIconTint ??
+                    _theme.palette.getAccent(),
               ),
           readIcon: readIcon ??
               Image.asset(
                 AssetConstants.messageReceived,
                 package: UIConstants.packageName,
-                color: receiptStyle?.readIconTint ?? _theme.palette.getPrimary(),
+                color:
+                    receiptStyle?.readIconTint ?? _theme.palette.getPrimary(),
               ),
           sentIcon: sentIcon ??
               Image.asset(
@@ -691,14 +723,15 @@ class CometChatConversations extends StatelessWidget {
     return CometChatBadge(
       count: conversation.unreadMessageCount ?? 0,
       style: BadgeStyle(
-            width: badgeStyle?.width ?? 25,
-            height: badgeStyle?.height ?? 25,
-            borderRadius: badgeStyle?.borderRadius ?? 100,
-            textStyle: TextStyle(
+        width: badgeStyle?.width ?? 25,
+        height: badgeStyle?.height ?? 25,
+        borderRadius: badgeStyle?.borderRadius ?? 100,
+        textStyle: TextStyle(
                 fontSize: _theme.typography.subtitle1.fontSize,
-                color: _theme.palette.getAccent()).merge(badgeStyle?.textStyle),
-            background: badgeStyle?.background ?? _theme.palette.getPrimary(),
-          ),
+                color: _theme.palette.getAccent())
+            .merge(badgeStyle?.textStyle),
+        background: badgeStyle?.background ?? _theme.palette.getPrimary(),
+      ),
     );
   }
 }

@@ -53,12 +53,25 @@ class CometChatConversationsWithMessagesController extends GetxController
     navigateToMessagesScreen(user: user, group: group);
   }
 
-  void navigateToMessagesScreen(
-      {User? user, Group? group, BuildContext? context}) {
+  void navigateToMessagesScreen({
+    User? user,
+    Group? group,
+    BuildContext? context,
+    Function(String)? onTapChatPageHeader,
+    Function(String groupId)? onTapTrailingIcon,
+    Widget? trailingIcon,
+    Function(String guid)? onTapItem,
+  }) {
+    if (onTapItem != null && group != null) {
+      onTapItem(group.guid);
+    }
     Navigator.push(
         context ?? this.context,
         MaterialPageRoute(
           builder: (context) => CometChatMessages(
+            onTapChatPageHeader: onTapChatPageHeader,
+            onTapTrailingIcon: onTapTrailingIcon,
+            trailingIcon: trailingIcon,
             user: user,
             group: group,
             theme: messageConfiguration?.theme ?? theme,

@@ -342,10 +342,10 @@ class MessagesDataSource implements DataSource {
       BaseMessage messageObject, BuildContext context, Group? group) {
     List<CometChatMessageOption> _optionList = [];
 
-    bool _isSentByMe = false;
-    if (loggedInUser.uid == messageObject.sender?.uid) {
-      _isSentByMe = true;
-    }
+    // bool _isSentByMe = false;
+    // if (loggedInUser.uid == messageObject.sender?.uid) {
+    //   _isSentByMe = true;
+    // }
 
     if (messageObject.category == MessageCategoryConstants.message) {
       switch (messageObject.type) {

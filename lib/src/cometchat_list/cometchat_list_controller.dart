@@ -5,6 +5,7 @@ import '../../flutter_chat_ui_kit.dart';
 abstract class CometChatListController<T1, T2> extends GetxController
     with CometChatListProtocol<T1>, KeyIdentifier<T1, T2> {
   List<T1> list = [];
+  Set<String>? groupIDs = {};
   bool isLoading = true;
   bool hasMoreItems = true;
   bool hasError = false;
@@ -12,7 +13,7 @@ abstract class CometChatListController<T1, T2> extends GetxController
   late dynamic request;
   Function(Exception)? onError;
 
-  CometChatListController(this.request,{this.onError});
+  CometChatListController(this.request, {this.onError});
 
   @override
   void onInit() {
@@ -36,32 +37,48 @@ abstract class CometChatListController<T1, T2> extends GetxController
   loadMoreElements({bool Function(T1 element)? isIncluded}) async {
     isLoading = true;
     try {
-      await request.fetchNext(onSuccess: (List<T1> fetchedList) {
-        if (fetchedList.isEmpty) {
-          isLoading = false;
-          hasMoreItems = false;
-          update();
-        } else {
-          isLoading = false;
-          hasMoreItems = true;
+      await request.fetchNext(
+          onSuccess: (List<T1> fetchedList) {
+            List<T1> tmpList = [];
+            if (fetchedList.isEmpty) {
+              isLoading = false;
+              hasMoreItems = false;
+              update();
+            } else {
+              isLoading = false;
+              hasMoreItems = true;
 
-          if (isIncluded == null) {
-            list.addAll(fetchedList);
-          } else {
-            for (var element in fetchedList) {
-              if (isIncluded(element) == true) {
-                list.add(element);
+              if (isIncluded == null) {
+                tmpList.addAll(fetchedList);
+              } else {
+                for (var element in fetchedList) {
+                  if (isIncluded(element) == true) {
+                    tmpList.add(element);
+                  }
+                }
               }
+              if (groupIDs != null) {
+                list.addAll(
+                  tmpList.where((conversation) {
+                    if (conversation is Conversation) {
+                      return groupIDs!.contains(
+                          (conversation.conversationWith as Group).guid);
+                    }
+                    return false;
+                  }).toList(),
+                );
+              } else {
+                list.assignAll(tmpList);
+              }
+              update();
             }
-          }
-
-          update();
-        }
-      }, onError: onError ?? (CometChatException e) {
-        error = e;
-        hasError = true;
-        update();
-      });
+          },
+          onError: onError ??
+              (CometChatException e) {
+                error = e;
+                hasError = true;
+                update();
+              });
     } catch (e, s) {
       error = CometChatException("ERR", s.toString(), "Error");
       hasError = true;
@@ -101,7 +118,6 @@ abstract class CometChatListController<T1, T2> extends GetxController
     }
   }
 
-  
   updateElementAt(T1 element, int index) {
     list[index] = element;
     update();

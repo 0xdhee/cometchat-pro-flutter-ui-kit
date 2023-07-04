@@ -53,13 +53,7 @@ class _SwipeTileState extends State<SwipeTile>
 
   @override
   Widget build(BuildContext context) {
-    int _length;
-    if (widget.menuItems == null) {
-      _length = 0;
-    } else {
-      _length = widget.menuItems.length;
-    }
-
+    int _length = widget.menuItems.length;
     final animation =
         Tween(begin: const Offset(0.0, 0.0), end: Offset(-0.2 * _length, 0.0))
             .animate(CurveTween(curve: Curves.decelerate).animate(_controller));
