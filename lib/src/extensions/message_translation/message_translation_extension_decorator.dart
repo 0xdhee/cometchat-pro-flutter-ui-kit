@@ -10,9 +10,14 @@ class MessageExtensionTranslationDecorator extends DataSourceDecorator {
       : super(dataSource);
 
   @override
-  Widget getTextMessageContentView(TextMessage message, BuildContext context,
-      BubbleAlignment _alignment, CometChatTheme theme) {
-    return getContentView(message, context, _alignment, theme);
+  Widget getTextMessageContentView(
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment _alignment,
+    CometChatTheme theme,
+    Function(String) onTapUrl,
+  ) {
+    return getContentView(message, context, _alignment, theme, onTapUrl);
   }
 
   @override
@@ -21,8 +26,8 @@ class MessageExtensionTranslationDecorator extends DataSourceDecorator {
     List<CometChatMessageOption> textTemplateOptions = super
         .getTextMessageOptions(loggedInUser, messageObject, context, group);
 
-    
-    if (messageObject.metadata!=null && messageObject.metadata!.containsKey('translated_message')==false) {
+    if (messageObject.metadata != null &&
+        messageObject.metadata!.containsKey('translated_message') == false) {
       textTemplateOptions.add(getOption(context));
     }
 
@@ -65,7 +70,9 @@ class MessageExtensionTranslationDecorator extends DataSourceDecorator {
           String? translatedMessage =
               data['translations']?[0]?['message_translated'];
 
-          if (translatedMessage != null && translatedMessage.isNotEmpty && translatedMessage!=message.text) {
+          if (translatedMessage != null &&
+              translatedMessage.isNotEmpty &&
+              translatedMessage != message.text) {
             Map<String, dynamic> metadata =
                 message.metadata ?? <String, dynamic>{};
             metadata.addAll({'translated_message': translatedMessage});
@@ -103,10 +110,15 @@ class MessageExtensionTranslationDecorator extends DataSourceDecorator {
     }
   }
 
-  Widget getContentView(TextMessage message, BuildContext context,
-      BubbleAlignment alignment, CometChatTheme theme) {
-    Widget? child =
-        super.getTextMessageContentView(message, context, alignment, theme);
+  Widget getContentView(
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment alignment,
+    CometChatTheme theme,
+    Function(String) onTapUrl,
+  ) {
+    Widget? child = super.getTextMessageContentView(
+        message, context, alignment, theme, onTapUrl);
     if (message.metadata != null &&
         message.metadata!.containsKey('translated_message')) {
       return MessageTranslationBubble(

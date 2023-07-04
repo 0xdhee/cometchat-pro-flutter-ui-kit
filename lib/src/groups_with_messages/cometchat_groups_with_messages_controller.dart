@@ -5,11 +5,13 @@ import 'package:flutter_chat_ui_kit/flutter_chat_ui_kit.dart';
 
 class CometChatGroupsWithMessagesController extends GetxController
     with CometChatGroupEventListener {
-  CometChatGroupsWithMessagesController(
-      {this.messageConfiguration,
-      this.theme,
-      this.createGroupConfiguration,
-      this.joinProtectedGroupConfiguration});
+  CometChatGroupsWithMessagesController({
+    this.messageConfiguration,
+    this.theme,
+    this.createGroupConfiguration,
+    this.joinProtectedGroupConfiguration,
+    required this.onTapUrl,
+  });
 
   ///[messageConfiguration] CometChatMessage configurations
   final MessageConfiguration? messageConfiguration;
@@ -27,6 +29,8 @@ class CometChatGroupsWithMessagesController extends GetxController
   late String _groupsEventListenerId;
 
   late BuildContext context;
+
+  final Function(String) onTapUrl;
 
   @override
   void onInit() {
@@ -70,6 +74,7 @@ class CometChatGroupsWithMessagesController extends GetxController
         context ?? this.context,
         MaterialPageRoute(
             builder: (context) => CometChatMessages(
+                  onTapUrl: onTapUrl,
                   group: group,
                   messageComposerConfiguration:
                       messageConfiguration?.messageComposerConfiguration ??

@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui_kit/flutter_chat_ui_kit.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LinkPreviewExtensionDecorator extends DataSourceDecorator {
   String messageTranslationTypeConstant = ExtensionConstants.linkPreview;
   LinkPreviewConfiguration? configuration;
 
-  LinkPreviewExtensionDecorator(DataSource dataSource,{this.configuration}) : super(dataSource);
+  LinkPreviewExtensionDecorator(DataSource dataSource, {this.configuration})
+      : super(dataSource);
 
   @override
-  Widget getTextMessageContentView(TextMessage message, BuildContext context,
-      BubbleAlignment _alignment, CometChatTheme theme) {
-    Widget? child =
-        super.getTextMessageContentView(message, context, _alignment, theme);
+  Widget getTextMessageContentView(
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment _alignment,
+    CometChatTheme theme,
+    Function(String) onTapUrl,
+  ) {
+    Widget? child = super.getTextMessageContentView(
+        message, context, _alignment, theme, onTapUrl);
     return LinkPreviewBubble(
       theme: configuration?.theme ?? theme,
-      onTapUrl: onTapUrl,
+      onTapUrl: (url) async {
+        onTapUrl(url);
+      },
       links: getMessageLinks(message),
       child: child,
       defaultImage: configuration?.defaultImage,
@@ -46,6 +53,7 @@ class LinkPreviewExtensionDecorator extends DataSourceDecorator {
     return links;
   }
 
+  /*
   final RegExp _emailRegex = RegExp(
     r'^(.*?)((mailto:)?[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z][A-Z]+)',
     caseSensitive: false,
@@ -66,5 +74,5 @@ class LinkPreviewExtensionDecorator extends DataSourceDecorator {
     } else if (_phoneNumberRegex.hasMatch(url)) {
       await launch('tel:$url');
     }
-  }
+  }*/
 }

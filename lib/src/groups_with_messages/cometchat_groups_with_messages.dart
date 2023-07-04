@@ -16,18 +16,21 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 ///             );
 /// ```
 class CometChatGroupsWithMessages extends StatefulWidget {
-  const CometChatGroupsWithMessages(
-      {Key? key,
-      this.group,
-      this.theme,
-      this.groupsConfiguration = const GroupsConfiguration(),
-      this.messageConfiguration = const MessageConfiguration(),
-      this.joinProtectedGroupConfiguration,
-      this.createGroupConfiguration = const CreateGroupConfiguration(),
-      this.createGroupIcon,
-      this.onCreateGroupIconClick,
-      this.hideCreateGroup = false})
-      : super(key: key);
+  const CometChatGroupsWithMessages({
+    Key? key,
+    this.group,
+    this.theme,
+    this.groupsConfiguration = const GroupsConfiguration(),
+    this.messageConfiguration = const MessageConfiguration(),
+    this.joinProtectedGroupConfiguration,
+    this.createGroupConfiguration = const CreateGroupConfiguration(),
+    this.createGroupIcon,
+    this.onCreateGroupIconClick,
+    this.hideCreateGroup = false,
+    required this.onTapUrl,
+  }) : super(key: key);
+
+  final Function(String) onTapUrl;
 
   ///[group] if null will return [CometChatGroups] screen else will navigate to [CometChatMessages]
   final Group? group;
@@ -74,6 +77,7 @@ class _CometChatGroupsWithMessagesState
 
     _cometChatGroupsWithMessagesController =
         CometChatGroupsWithMessagesController(
+            onTapUrl: widget.onTapUrl,
             messageConfiguration: widget.messageConfiguration,
             joinProtectedGroupConfiguration:
                 widget.joinProtectedGroupConfiguration,

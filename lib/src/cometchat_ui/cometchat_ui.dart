@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui_kit/flutter_chat_ui_kit.dart';
 
 enum TabAlignment { top, bottom }
+
 enum Visibility { onTap, always }
 
 class CometChatUI extends StatefulWidget {
   const CometChatUI(
       {Key? key,
+      required this.onTapUrl,
       this.tabAlignment,
       this.tabSeparatorColor,
       this.style,
@@ -48,6 +50,9 @@ class CometChatUI extends StatefulWidget {
 
   ///[theme] used to set custom theme for CometChatUI
   final CometChatTheme? theme;
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
 
   @override
   _CometChatUIState createState() => _CometChatUIState();
@@ -127,6 +132,7 @@ class _CometChatUIState extends State<CometChatUI> {
 
   _getUserWithMessages() {
     return CometChatUsersWithMessages(
+      onTapUrl: widget.onTapUrl,
       messageConfiguration:
           widget.usersWithMessagesConfiguration.messageConfiguration,
       usersConfiguration:
@@ -136,6 +142,7 @@ class _CometChatUIState extends State<CometChatUI> {
 
   _getConversationWithMessages() {
     return CometChatConversationsWithMessages(
+      onTapUrl: widget.onTapUrl,
       messageConfiguration:
           widget.conversationsWithMessagesConfiguration?.messageConfiguration ??
               const MessageConfiguration(),
@@ -143,12 +150,12 @@ class _CometChatUIState extends State<CometChatUI> {
               ?.conversationConfigurations ??
           const ConversationsConfiguration(),
       theme: widget.conversationsWithMessagesConfiguration?.theme ?? _theme,
-      
     );
   }
 
   _getGroupsWithMessage() {
     return CometChatGroupsWithMessages(
+      onTapUrl: widget.onTapUrl,
       messageConfiguration:
           widget.groupsWithMessagesConfiguration.messageConfiguration ??
               const MessageConfiguration(),
@@ -163,10 +170,10 @@ class _CometChatUIState extends State<CometChatUI> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          border: widget.style?.border, 
+          border: widget.style?.border,
           gradient: widget.style?.gradient,
-          color: widget.style?.gradient==null? widget.style?.background:null
-          ),
+          color:
+              widget.style?.gradient == null ? widget.style?.background : null),
       child: _tabAlignment == TabAlignment.bottom
           ? BottomBar(
               tabItems: _tabList,

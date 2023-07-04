@@ -166,7 +166,8 @@ class MessagesDataSource implements DataSource {
   }
 
   @override
-  CometChatMessageTemplate getTextMessageTemplate(CometChatTheme theme) {
+  CometChatMessageTemplate getTextMessageTemplate(
+      CometChatTheme theme, Function(String) onTapUrl) {
     return CometChatMessageTemplate(
         // name: MessageTypeConstants.text,
         type: MessageTypeConstants.text,
@@ -178,17 +179,22 @@ class MessagesDataSource implements DataSource {
             return getDeleteMessageBubble(message, theme);
           }
           return ChatConfigurator.getDataSource().getTextMessageContentView(
-              textMessage, context, _alignment, theme);
+              textMessage, context, _alignment, theme, onTapUrl);
         },
         options: ChatConfigurator.getDataSource().getMessageOptions,
         bottomView: ChatConfigurator.getDataSource().getBottomView);
   }
 
   @override
-  Widget getTextMessageContentView(TextMessage message, BuildContext context,
-      BubbleAlignment _alignment, CometChatTheme theme) {
+  Widget getTextMessageContentView(
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment _alignment,
+    CometChatTheme theme,
+    Function(String) onTapUrl,
+  ) {
     return ChatConfigurator.getDataSource().getTextMessageBubble(
-        message.text, message, context, _alignment, theme, null);
+        message.text, message, context, _alignment, theme, null, onTapUrl);
   }
 
   @override
@@ -285,10 +291,10 @@ class MessagesDataSource implements DataSource {
 
   @override
   List<CometChatMessageTemplate> getAllMessageTemplates(
-      {CometChatTheme? theme}) {
+      {CometChatTheme? theme, required Function(String) onTapUrl}) {
     CometChatTheme _theme = theme ?? cometChatTheme;
     return [
-      ChatConfigurator.getDataSource().getTextMessageTemplate(_theme),
+      ChatConfigurator.getDataSource().getTextMessageTemplate(_theme, onTapUrl),
       ChatConfigurator.getDataSource().getImageMessageTemplate(_theme),
       ChatConfigurator.getDataSource().getVideoMessageTemplate(_theme),
       ChatConfigurator.getDataSource().getAudioMessageTemplate(_theme),
@@ -298,18 +304,20 @@ class MessagesDataSource implements DataSource {
   }
 
   @override
-  CometChatMessageTemplate? getMessageTemplate(
-      {required String messageType,
-      required String messageCategory,
-      CometChatTheme? theme}) {
+  CometChatMessageTemplate? getMessageTemplate({
+    required String messageType,
+    required String messageCategory,
+    CometChatTheme? theme,
+    required Function(String) onTapUrl,
+  }) {
     CometChatTheme _theme = theme ?? cometChatTheme;
 
     CometChatMessageTemplate? template;
     if (messageCategory != MessageCategoryConstants.call) {
       switch (messageType) {
         case MessageTypeConstants.text:
-          template =
-              ChatConfigurator.getDataSource().getTextMessageTemplate(_theme);
+          template = ChatConfigurator.getDataSource()
+              .getTextMessageTemplate(_theme, onTapUrl);
           break;
         case MessageTypeConstants.image:
           template =
@@ -647,13 +655,16 @@ class MessagesDataSource implements DataSource {
 
   @override
   Widget getTextMessageBubble(
-      String messageText,
-      TextMessage message,
-      BuildContext context,
-      BubbleAlignment alignment,
-      CometChatTheme theme,
-      TextBubbleStyle? style) {
+    String messageText,
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment alignment,
+    CometChatTheme theme,
+    TextBubbleStyle? style,
+    Function(String) onTapUrl,
+  ) {
     return CometChatTextBubble(
+      onTapUrl: onTapUrl,
       text: messageText,
       alignment: alignment,
       theme: theme,

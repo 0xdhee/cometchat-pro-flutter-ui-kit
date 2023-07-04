@@ -12,15 +12,17 @@ class TextModerationExtensionDecorator extends DataSourceDecorator {
 
   @override
   Widget getTextMessageBubble(
-      String messageText,
-      TextMessage message,
-      BuildContext context,
-      BubbleAlignment alignment,
-      CometChatTheme theme,
-      TextBubbleStyle? style) {
+    String messageText,
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment alignment,
+    CometChatTheme theme,
+    TextBubbleStyle? style,
+    Function(String) onTapUrl,
+  ) {
     String filteredText = getContentText(message);
     return super.getTextMessageBubble(filteredText, message, context, alignment,
-        configuration?.theme ?? theme, configuration?.style ?? style);
+        configuration?.theme ?? theme, configuration?.style ?? style, onTapUrl);
   }
 
   @override

@@ -12,6 +12,12 @@ import '../../flutter_chat_ui_kit.dart';
 class CometChatMessages extends StatefulWidget {
   const CometChatMessages(
       {Key? key,
+      this.trailingIcon,
+      this.onTapTrailingIcon,
+      this.onTapChatPageHeader,
+      required this.onTapUrl,
+      this.onAddMediaClick,
+      this.onSendMessageClick,
       this.user,
       this.group,
       this.hideMessageComposer = false,
@@ -38,6 +44,24 @@ class CometChatMessages extends StatefulWidget {
         assert(user == null || group == null,
             "Only one of user or group should be passed"),
         super(key: key);
+
+  ///[header trailing Icon]
+  final Widget? trailingIcon;
+
+  ///[header trailing Icon click]
+  final void Function(String groupId)? onTapTrailingIcon;
+
+  ///[on Tap chat page Header] handles the tap on chat page header
+  final void Function(String)? onTapChatPageHeader;
+
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
+
+  ///[add media option click in chat screen]
+  final Function(String guid, String mediaType)? onAddMediaClick;
+
+  ///[send button click in chat screen]
+  final Function(String guid, String messageType)? onSendMessageClick;
 
   ///[hideMessageComposer] hides the composer , default false
   final bool hideMessageComposer;
@@ -195,6 +219,7 @@ class _CometChatMessagesState extends State<CometChatMessages> {
     return widget.messageListView != null
         ? widget.messageListView!(controller.user, controller.group, context)
         : CometChatMessageList(
+            onTapUrl: widget.onTapUrl,
             user: controller.user,
             group: controller.group,
             alignment: widget.messageListConfiguration.alignment ??
@@ -222,7 +247,8 @@ class _CometChatMessagesState extends State<CometChatMessages> {
             loadingStateView: widget.messageListConfiguration.loadingStateView,
             disableSoundForMessages:
                 widget.messageListConfiguration.disableSoundForMessages ??
-                    widget.disableSoundForMessages,
+                    widget.disableSoundForMessages ??
+                    true,
             customSoundForMessagePackage:
                 widget.messageListConfiguration.customSoundForMessagePackage ??
                     widget.customSoundForIncomingMessagePackage,
@@ -256,6 +282,8 @@ class _CometChatMessagesState extends State<CometChatMessages> {
         ? widget.messageComposerView!(
             controller.user, controller.group, context)
         : CometChatMessageComposer(
+            onAddMediaClick: widget.onAddMediaClick,
+            onSendMessageClick: widget.onSendMessageClick,
             user: controller.user,
             group: controller.group,
             placeholderText:
@@ -279,7 +307,8 @@ class _CometChatMessagesState extends State<CometChatMessages> {
             // stateCallBack: composerStateCallBack,
             stateCallBack: widget.messageComposerConfiguration.stateCallBack,
             attachmentIcon: widget.messageComposerConfiguration.attachmentIcon,
-            liveReactionIcon: widget.messageComposerConfiguration.liveReactionIcon,
+            liveReactionIcon:
+                widget.messageComposerConfiguration.liveReactionIcon,
             messageComposerStyle: MessageComposerStyle(
                 background: widget.messageComposerConfiguration
                         .messageComposerStyle?.background ??
@@ -355,6 +384,10 @@ class _CometChatMessagesState extends State<CometChatMessages> {
                           ? widget.messageHeaderView!(
                               value.user, value.group, context)
                           : CometChatMessageHeader(
+                              hideTailView: true,
+                              onTapChatPageHeader: widget.onTapChatPageHeader,
+                              onTapTrailingIcon: widget.onTapTrailingIcon,
+                              trailingIcon: widget.trailingIcon,
                               appBarOptions: widget.messageHeaderConfiguration
                                       .appBarOptions ??
                                   (widget.hideDetails != true

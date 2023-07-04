@@ -4,8 +4,17 @@ import 'package:flutter_chat_ui_kit/flutter_chat_ui_kit.dart';
 
 class CometChatConversationsWithMessagesController extends GetxController
     with CometChatMessageEventListener, CometChatConversationEventListener {
-  CometChatConversationsWithMessagesController(
-      {this.messageConfiguration, this.theme});
+  CometChatConversationsWithMessagesController({
+    this.messageConfiguration,
+    this.theme,
+    required this.onTapUrl,
+    this.onTapItem,
+    this.onAddMediaClick,
+    this.onSendMessageClick,
+    this.onTapChatPageHeader,
+    this.onTapTrailingIcon,
+    this.trailingIcon,
+  });
 
   ///[messageConfiguration] CometChatMessage configurations
   final MessageConfiguration? messageConfiguration;
@@ -21,6 +30,26 @@ class CometChatConversationsWithMessagesController extends GetxController
   final String conversationEventListenerId = "CWMConversationListener";
 
   //Class variables end-----
+  ///[onTapUrl] handle url tap inside message bubble
+  final Function(String) onTapUrl;
+
+  ///[on Tap groups chat listing Item]
+  final Function(String guid)? onTapItem;
+
+  ///[add media option click in chat screen]
+  final Function(String guid, String mediaType)? onAddMediaClick;
+
+  ///[send button click in chat screen]
+  final Function(String guid, String messageType)? onSendMessageClick;
+
+  ///[on Tap chat page Header] handles the tap on chat page header
+  final void Function(String)? onTapChatPageHeader;
+
+  ///[header trailing Icon click]
+  final void Function(String groupId)? onTapTrailingIcon;
+
+  ///[header trailing Icon]
+  final Widget? trailingIcon;
 
   @override
   void onInit() {
@@ -53,22 +82,18 @@ class CometChatConversationsWithMessagesController extends GetxController
     navigateToMessagesScreen(user: user, group: group);
   }
 
-  void navigateToMessagesScreen({
-    User? user,
-    Group? group,
-    BuildContext? context,
-    Function(String)? onTapChatPageHeader,
-    Function(String groupId)? onTapTrailingIcon,
-    Widget? trailingIcon,
-    Function(String guid)? onTapItem,
-  }) {
+  void navigateToMessagesScreen(
+      {User? user, Group? group, BuildContext? context}) {
     if (onTapItem != null && group != null) {
-      onTapItem(group.guid);
+      onTapItem!(group.guid);
     }
     Navigator.push(
         context ?? this.context,
         MaterialPageRoute(
           builder: (context) => CometChatMessages(
+            onTapUrl: onTapUrl,
+            onAddMediaClick: onAddMediaClick,
+            onSendMessageClick: onSendMessageClick,
             onTapChatPageHeader: onTapChatPageHeader,
             onTapTrailingIcon: onTapTrailingIcon,
             trailingIcon: trailingIcon,

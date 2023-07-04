@@ -167,13 +167,18 @@ class CometChatMessagesController extends GetxController
     detailsState = _detailsState;
   }
 
-  onThreadRepliesClick(BaseMessage message, BuildContext context,
-      {Widget Function(BaseMessage, BuildContext)? bubbleView}) async {
+  onThreadRepliesClick(
+    BaseMessage message,
+    BuildContext context, {
+    Widget Function(BaseMessage, BuildContext)? bubbleView,
+    required Function(String) onTapUrl,
+  }) async {
     if (loggedInUser != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => CometChatThreadedMessages(
+                  onTapUrl: onTapUrl,
                   parentMessage: message,
                   loggedInUser: loggedInUser!,
                   title: threadedMessagesConfiguration?.title,

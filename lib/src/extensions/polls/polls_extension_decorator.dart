@@ -40,11 +40,11 @@ class PollsExtensionDecorator extends DataSourceDecorator {
 
   @override
   List<CometChatMessageTemplate> getAllMessageTemplates(
-      {CometChatTheme? theme}) {
+      {CometChatTheme? theme, required Function(String) onTapUrl}) {
     CometChatTheme _theme = theme ?? cometChatTheme;
 
     List<CometChatMessageTemplate> templateList =
-        super.getAllMessageTemplates(theme: _theme);
+        super.getAllMessageTemplates(theme: _theme, onTapUrl: onTapUrl);
 
     templateList.add(getTemplate(theme: _theme));
 

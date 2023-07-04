@@ -8,13 +8,17 @@ import '../utils/utils.dart';
 import 'messages_builder_protocol.dart';
 
 typedef ThreadRepliesClick = void Function(
-    BaseMessage message, BuildContext context,
-    {Widget Function(BaseMessage, BuildContext)? bubbleView});
+  BaseMessage message,
+  BuildContext context, {
+  Widget Function(BaseMessage, BuildContext)? bubbleView,
+  required Function(String) onTapUrl,
+});
 
 ///[CometChatMessageList] is a component that the lists all messages with the help of appropriate message bubbles
 class CometChatMessageList extends StatefulWidget {
   const CometChatMessageList(
       {Key? key,
+      required this.onTapUrl,
       this.errorStateText,
       this.emptyStateText,
       this.stateCallBack,
@@ -55,6 +59,8 @@ class CometChatMessageList extends StatefulWidget {
         assert(user == null || group == null,
             "Only one of user or group should be passed"),
         super(key: key);
+
+  final Function(String) onTapUrl;
 
   ///[user] user object  for user message list
   final User? user;
@@ -199,6 +205,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
     messagesRequestBuilder.hideReplies ??= true;
 
     messageListController = CometChatMessageListController(
+        onTapUrl: widget.onTapUrl,
         customIncomingMessageSound: widget.customSoundForMessages,
         customIncomingMessageSoundPackage: widget.customSoundForMessagePackage,
         disableSoundForMessages: widget.disableSoundForMessages ?? true,
@@ -461,7 +468,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
         onTap: () {
           if (widget.onThreadRepliesClick != null) {
             widget.onThreadRepliesClick!(_messageObject, context,
-                bubbleView: getMessageWidget);
+                bubbleView: getMessageWidget, onTapUrl: widget.onTapUrl);
           }
         },
         child: Container(
@@ -679,7 +686,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
           if (_item.id == MessageOptionConstants.replyInThreadMessage) {
             if (widget.onThreadRepliesClick != null) {
               widget.onThreadRepliesClick!(message, context,
-                  bubbleView: getMessageWidget);
+                  bubbleView: getMessageWidget, onTapUrl: widget.onTapUrl);
             }
             return;
           }

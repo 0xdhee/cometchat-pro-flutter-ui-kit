@@ -9,7 +9,9 @@ import '../utils/media_picker.dart';
 class CometChatMessageComposerController extends GetxController
     with CometChatMessageEventListener, CometChatUIEventListener {
   CometChatMessageComposerController(
-      {this.user,
+      {this.onSendMessageClick,
+      this.onAddMediaClick,
+      this.user,
       this.group,
       this.text,
       this.parentMessageId = 0,
@@ -29,6 +31,8 @@ class CometChatMessageComposerController extends GetxController
   }
 
   //-------------------------Variable Declaration-----------------------------
+  final Function(String guid, String messageType)? onSendMessageClick;
+  final Function(String guid, String mediaType)? onAddMediaClick;
 
   ///[previewMessageMode] controls the visibility of message preview above input field
   PreviewMessageMode previewMessageMode = PreviewMessageMode.none;
@@ -583,6 +587,9 @@ class CometChatMessageComposerController extends GetxController
     if (item == null) {
       return;
     }
+    if (onAddMediaClick != null) {
+      onAddMediaClick!(group?.guid ?? '', item.title);
+    }
     if (item.onItemClick != null) {
       item.onItemClick(user?.uid, group?.guid);
     } else {
@@ -612,6 +619,9 @@ class CometChatMessageComposerController extends GetxController
       if (_pickedFile != null && _type != null) {
         debugPrint(_pickedFile.path);
         sendMediaMessage(pickedFile: _pickedFile, messageType: _type);
+        if (onSendMessageClick != null) {
+          onSendMessageClick!(group?.guid ?? '', _type);
+        }
       }
     }
   }
@@ -640,6 +650,9 @@ class CometChatMessageComposerController extends GetxController
 //triggered if developer doesn't pass their onSendButtonClick handler
   onSendButtonClick() {
     if (textEditingController.text.isNotEmpty) {
+      if (onSendMessageClick != null) {
+        onSendMessageClick!(group?.guid ?? '', 'text');
+      }
       if (previewMessageMode == PreviewMessageMode.none) {
         sendTextMessage();
       } else if (previewMessageMode == PreviewMessageMode.edit) {
@@ -702,7 +715,7 @@ class CometChatMessageComposerController extends GetxController
   bool isForThisWidget(Map<String, dynamic>? id) {
     if (id == null) {
       return true; //if passed id is null , that means for all composer
-    } 
+    }
     if ((id['uid'] != null &&
             id['uid'] ==
                 user?.uid) //checking if uid or guid match composer's uid or guid

@@ -28,8 +28,13 @@ abstract class DataSource {
       BaseMessage message, BuildContext context, BubbleAlignment _alignment);
 
   ///override this to change content view for messages of type [MessageTypeConstants.text]
-  Widget getTextMessageContentView(TextMessage message, BuildContext context,
-      BubbleAlignment _alignment, CometChatTheme theme);
+  Widget getTextMessageContentView(
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment _alignment,
+    CometChatTheme theme,
+    Function(String) onTapUrl,
+  );
 
   ///override this to change content view for messages of type [MessageTypeConstants.image]
   Widget getImageMessageContentView(MediaMessage message, BuildContext context,
@@ -48,7 +53,10 @@ abstract class DataSource {
       BubbleAlignment _alignment, CometChatTheme theme);
 
   ///override this to alter template for messages of type [MessageTypeConstants.text]
-  CometChatMessageTemplate getTextMessageTemplate(CometChatTheme theme);
+  CometChatMessageTemplate getTextMessageTemplate(
+    CometChatTheme theme,
+    Function(String) onTapUrl,
+  );
 
   ///override this to alter template for messages of type [MessageTypeConstants.audio]
   CometChatMessageTemplate getAudioMessageTemplate(CometChatTheme theme);
@@ -70,13 +78,15 @@ abstract class DataSource {
   /// by default it uses method [getTextMessageTemplate] , [getAudioMessageTemplate] ,[getVideoMessageTemplate],
   /// [getImageMessageTemplate],[getGroupActionTemplate] and [getFileMessageTemplate]
   List<CometChatMessageTemplate> getAllMessageTemplates(
-      {CometChatTheme? theme});
+      {CometChatTheme? theme, required Function(String) onTapUrl});
 
   ///override this to get messages of different template
-  CometChatMessageTemplate? getMessageTemplate(
-      {required String messageType,
-      required String messageCategory,
-      CometChatTheme? theme});
+  CometChatMessageTemplate? getMessageTemplate({
+    required String messageType,
+    required String messageCategory,
+    CometChatTheme? theme,
+    required Function(String) onTapUrl,
+  });
 
   ///override this to alter options for messages of given type in [messageObject]
   List<CometChatMessageOption> getMessageOptions(User loggedInUser,
@@ -121,12 +131,14 @@ abstract class DataSource {
 
   ///override this to change view inside content view of message type [MessageTypeConstants.text]
   Widget getTextMessageBubble(
-      String messageText,
-      TextMessage message,
-      BuildContext context,
-      BubbleAlignment alignment,
-      CometChatTheme theme,
-      TextBubbleStyle? style);
+    String messageText,
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment alignment,
+    CometChatTheme theme,
+    TextBubbleStyle? style,
+    Function(String) onTapUrl,
+  );
 
   ///override this to change view inside content view of message type [MessageTypeConstants.image]
   Widget getImageMessageBubble(

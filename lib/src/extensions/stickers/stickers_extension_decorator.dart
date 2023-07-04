@@ -9,12 +9,14 @@ class StickersExtensionDecorator extends DataSourceDecorator {
       : super(dataSource);
 
   @override
-  List<CometChatMessageTemplate> getAllMessageTemplates(
-      {CometChatTheme? theme}) {
+  List<CometChatMessageTemplate> getAllMessageTemplates({
+    CometChatTheme? theme,
+    required Function(String) onTapUrl,
+  }) {
     CometChatTheme _theme = theme ?? cometChatTheme;
 
     List<CometChatMessageTemplate> templateList =
-        super.getAllMessageTemplates(theme: _theme);
+        super.getAllMessageTemplates(theme: _theme, onTapUrl: onTapUrl);
     templateList.add(getTemplate(theme: _theme));
 
     return templateList;

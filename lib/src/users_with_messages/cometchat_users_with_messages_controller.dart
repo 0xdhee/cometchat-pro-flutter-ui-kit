@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui_kit/flutter_chat_ui_kit.dart';
 
 class CometChatUsersWithMessagesController extends GetxController {
-  CometChatUsersWithMessagesController(
-      {this.messageConfiguration, this.theme}) {
+  CometChatUsersWithMessagesController({
+    this.messageConfiguration,
+    this.theme,
+    required this.onTapUrl,
+  }) {
     tag = "tag$counter";
     counter++;
     debugPrint('uwm constructor of controller called');
@@ -21,6 +24,8 @@ class CometChatUsersWithMessagesController extends GetxController {
 
   late BuildContext context;
 
+  final Function(String) onTapUrl;
+
   void onItemTap(User user) {
     if (user.hasBlockedMe == false) {
       navigateToMessagesScreen(user: user);
@@ -34,6 +39,7 @@ class CometChatUsersWithMessagesController extends GetxController {
         context ?? this.context,
         MaterialPageRoute(
             builder: (context) => CometChatMessages(
+                  onTapUrl: onTapUrl,
                   user: user,
                   messageComposerConfiguration:
                       messageConfiguration?.messageComposerConfiguration ??

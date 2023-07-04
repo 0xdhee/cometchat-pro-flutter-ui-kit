@@ -9,6 +9,7 @@ import '../../flutter_chat_ui_kit.dart' as cc;
 class CometChatThreadedMessages extends StatefulWidget {
   const CometChatThreadedMessages(
       {Key? key,
+      required this.onTapUrl,
       required this.parentMessage,
       this.title,
       this.closeIcon,
@@ -21,6 +22,8 @@ class CometChatThreadedMessages extends StatefulWidget {
       required this.loggedInUser,
       this.theme})
       : super(key: key);
+
+  final Function(String) onTapUrl;
 
   ///[parentMessage] parent message for thread
   final BaseMessage parentMessage;
@@ -130,6 +133,7 @@ class _CometChatThreadedMessagesState extends State<CometChatThreadedMessages> {
     }
 
     return CometChatMessageList(
+      onTapUrl: widget.onTapUrl,
       user: controller.user,
       group: controller.group,
       alignment:

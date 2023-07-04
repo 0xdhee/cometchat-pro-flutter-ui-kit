@@ -40,6 +40,8 @@ import 'package:get/get.dart';
 class CometChatMessageComposer extends StatelessWidget {
   CometChatMessageComposer(
       {Key? key,
+      this.onSendMessageClick,
+      this.onAddMediaClick,
       User? user,
       Group? group,
       this.messageComposerStyle = const MessageComposerStyle(),
@@ -73,6 +75,8 @@ class CometChatMessageComposer extends StatelessWidget {
         assert(user == null || group == null,
             "Only one of user or group should be passed"),
         cometChatMessageComposerController = CometChatMessageComposerController(
+            onAddMediaClick: onAddMediaClick,
+            onSendMessageClick: onSendMessageClick,
             parentMessageId: parentMessageId,
             disableSoundForMessages: disableSoundForMessages,
             customSoundForMessage: customSoundForMessage,
@@ -89,6 +93,9 @@ class CometChatMessageComposer extends StatelessWidget {
             headerView: headerView,
             onError: onError),
         super(key: key);
+
+  final Function(String guid, String messageType)? onSendMessageClick;
+  final Function(String guid, String mediaType)? onAddMediaClick;
 
   ///[messageComposerStyle] message composer style
   final MessageComposerStyle messageComposerStyle;

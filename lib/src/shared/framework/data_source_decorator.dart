@@ -66,8 +66,8 @@ abstract class DataSourceDecorator implements DataSource {
 
   @override
   List<CometChatMessageTemplate> getAllMessageTemplates(
-      {CometChatTheme? theme}) {
-    return dataSource.getAllMessageTemplates(theme: theme);
+      {CometChatTheme? theme, required Function(String) onTapUrl}) {
+    return dataSource.getAllMessageTemplates(theme: theme, onTapUrl: onTapUrl);
   }
 
   @override
@@ -105,9 +105,13 @@ abstract class DataSourceDecorator implements DataSource {
   CometChatMessageTemplate? getMessageTemplate(
       {required String messageType,
       required String messageCategory,
-      CometChatTheme? theme}) {
+      CometChatTheme? theme,
+      required Function(String) onTapUrl}) {
     return dataSource.getMessageTemplate(
-        messageType: messageType, messageCategory: messageCategory);
+      messageType: messageType,
+      messageCategory: messageCategory,
+      onTapUrl: onTapUrl,
+    );
   }
 
   @override
@@ -116,15 +120,21 @@ abstract class DataSourceDecorator implements DataSource {
   }
 
   @override
-  CometChatMessageTemplate getTextMessageTemplate(CometChatTheme theme) {
-    return dataSource.getTextMessageTemplate(theme);
+  CometChatMessageTemplate getTextMessageTemplate(
+      CometChatTheme theme, Function(String) onTapUrl) {
+    return dataSource.getTextMessageTemplate(theme, onTapUrl);
   }
 
   @override
-  Widget getTextMessageContentView(TextMessage message, BuildContext context,
-      BubbleAlignment _alignment, CometChatTheme theme) {
+  Widget getTextMessageContentView(
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment _alignment,
+    CometChatTheme theme,
+    Function(String) onTapUrl,
+  ) {
     return dataSource.getTextMessageContentView(
-        message, context, _alignment, theme);
+        message, context, _alignment, theme, onTapUrl);
   }
 
   @override
@@ -190,14 +200,16 @@ abstract class DataSourceDecorator implements DataSource {
 
   @override
   Widget getTextMessageBubble(
-      String messageText,
-      TextMessage message,
-      BuildContext context,
-      BubbleAlignment alignment,
-      CometChatTheme theme,
-      TextBubbleStyle? style) {
+    String messageText,
+    TextMessage message,
+    BuildContext context,
+    BubbleAlignment alignment,
+    CometChatTheme theme,
+    TextBubbleStyle? style,
+    Function(String) onTapUrl,
+  ) {
     return dataSource.getTextMessageBubble(
-        messageText, message, context, alignment, theme, style);
+        messageText, message, context, alignment, theme, style, onTapUrl);
   }
 
   @override

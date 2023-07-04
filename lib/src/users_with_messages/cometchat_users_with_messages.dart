@@ -37,13 +37,16 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 /// ```
 
 class CometChatUsersWithMessages extends StatefulWidget {
-  const CometChatUsersWithMessages(
-      {Key? key,
-      this.theme,
-      this.usersConfiguration = const UsersConfiguration(),
-      this.messageConfiguration = const MessageConfiguration(),
-      this.user})
-      : super(key: key);
+  const CometChatUsersWithMessages({
+    Key? key,
+    this.theme,
+    this.usersConfiguration = const UsersConfiguration(),
+    this.messageConfiguration = const MessageConfiguration(),
+    this.user,
+    required this.onTapUrl,
+  }) : super(key: key);
+
+  final Function(String) onTapUrl;
 
   ///[theme] can pass custom theme
   final CometChatTheme? theme;
@@ -64,7 +67,6 @@ class CometChatUsersWithMessages extends StatefulWidget {
 
 class _CometChatUsersWithMessagesState
     extends State<CometChatUsersWithMessages> {
-      
   late CometChatUsersWithMessagesController
       _cometChatUsersWithMessagesController;
 
@@ -73,11 +75,14 @@ class _CometChatUsersWithMessagesState
     super.initState();
     _cometChatUsersWithMessagesController =
         CometChatUsersWithMessagesController(
-            messageConfiguration: widget.messageConfiguration,
-            theme: widget.theme);
-    if (widget.user != null && widget.user?.hasBlockedMe==false) {
+      messageConfiguration: widget.messageConfiguration,
+      theme: widget.theme,
+      onTapUrl: widget.onTapUrl,
+    );
+    if (widget.user != null && widget.user?.hasBlockedMe == false) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        _cometChatUsersWithMessagesController.navigateToMessagesScreen(user:widget.user,context: context);
+        _cometChatUsersWithMessagesController.navigateToMessagesScreen(
+            user: widget.user, context: context);
       });
     }
   }
@@ -101,7 +106,7 @@ class _CometChatUsersWithMessagesState
           return CometChatUsers(
             usersRequestBuilder: widget.usersConfiguration?.usersRequestBuilder,
             title: widget.usersConfiguration?.title,
-            theme:  widget.usersConfiguration?.theme ?? widget.theme,
+            theme: widget.usersConfiguration?.theme ?? widget.theme,
             showBackButton: widget.usersConfiguration?.showBackButton ?? true,
             hideSearch: widget.usersConfiguration?.hideSearch ?? false,
             searchPlaceholder: widget.usersConfiguration?.searchPlaceholder,
@@ -134,7 +139,8 @@ class _CometChatUsersWithMessagesState
             avatarStyle: widget.usersConfiguration?.avatarStyle,
             usersStyle:
                 widget.usersConfiguration?.usersStyle ?? const UsersStyle(),
-            onItemTap: widget.usersConfiguration?.onItemTap ?? usersWithMessagesController.onItemTap,
+            onItemTap: widget.usersConfiguration?.onItemTap ??
+                usersWithMessagesController.onItemTap,
             onItemLongPress: widget.usersConfiguration?.onItemLongPress,
             onBack: widget.usersConfiguration?.onBack,
             onError: widget.usersConfiguration?.onError,

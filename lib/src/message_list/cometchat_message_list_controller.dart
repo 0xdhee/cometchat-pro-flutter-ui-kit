@@ -17,6 +17,7 @@ class CometChatMessageListController
   //--------------------Constructor-----------------------
   CometChatMessageListController(
       {required this.messagesBuilderProtocol,
+      required this.onTapUrl,
       this.user,
       this.group,
       this.customIncomingMessageSound,
@@ -83,6 +84,7 @@ class CometChatMessageListController
   }
 
   //-------------------------Variable Declaration-----------------------------
+  Function(String) onTapUrl;
   late MessagesBuilderProtocol messagesBuilderProtocol;
   late String dateStamp;
   late String _messageListenerId;
@@ -133,8 +135,8 @@ class CometChatMessageListController
   }
 
   createTemplateMap() {
-    List<CometChatMessageTemplate> localTypes =
-        ChatConfigurator.getDataSource().getAllMessageTemplates(theme: theme);
+    List<CometChatMessageTemplate> localTypes = ChatConfigurator.getDataSource()
+        .getAllMessageTemplates(theme: theme, onTapUrl: onTapUrl);
 
     messageTypes?.forEach((element) {
       templateMap["${element.category}_${element.type}"] = element;
