@@ -842,6 +842,7 @@ class _CometChatMessageListState extends State<CometChatMessageList> {
           return Stack(
             children: [
               ListView.builder(
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 controller: _controller.messageListScrollController,
                 reverse: true,
                 itemCount: value.hasMoreItems
