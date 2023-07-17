@@ -15,8 +15,8 @@ class CometChatActionSheet extends StatefulWidget {
       this.titleStyle,
       this.layoutModeIcon,
       this.layoutIconColor,
-      this.isLayoutModeIconVisible,
-      this.isTitleVisible,
+      this.isLayoutModeIconVisible = false,
+      this.isTitleVisible = false,
       this.isGridLayout})
       : super(key: key);
 
@@ -27,8 +27,8 @@ class CometChatActionSheet extends StatefulWidget {
   final TextStyle? titleStyle;
   final IconData? layoutModeIcon;
   final Color? layoutIconColor;
-  final bool? isLayoutModeIconVisible;
-  final bool? isTitleVisible;
+  final bool isLayoutModeIconVisible;
+  final bool isTitleVisible;
   final bool? isGridLayout;
 
   @override
@@ -46,9 +46,9 @@ class _CometChatActionSheetState extends State<CometChatActionSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.35,
-      minChildSize: 0.35,
-      maxChildSize: 0.75,
+      initialChildSize: 0.30,
+      minChildSize: 0.30,
+      maxChildSize: 0.70,
       expand: false,
       builder: (BuildContext context, ScrollController scrollController) {
         return Container(
@@ -70,7 +70,7 @@ class _CometChatActionSheetState extends State<CometChatActionSheet> {
                     borderRadius: BorderRadius.circular(2)),
               ),
               const SizedBox(
-                height: 24,
+                height: 16,
               ),
               if (!(widget.isLayoutModeIconVisible == false ||
                   widget.isTitleVisible == false))
@@ -99,9 +99,13 @@ class _CometChatActionSheetState extends State<CometChatActionSheet> {
                   ),
                 ),
               Expanded(
-                  child: _isGridLayout == true
-                      ? gridView(widget.actionItems, scrollController)
-                      : listView(widget.actionItems, scrollController))
+                child: _isGridLayout == true
+                    ? gridView(widget.actionItems, scrollController)
+                    : listView(widget.actionItems, scrollController),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
             ],
           ),
         );
@@ -233,9 +237,9 @@ Future<ActionItem?>? showCometChatActionSheet(
     final String? title,
     final TextStyle? titleStyle,
     final IconData? layoutModeIcon,
-    final bool? isLayoutModeIconVisible,
+    final bool isLayoutModeIconVisible = false,
     final Color? layoutIconColor,
-    final bool? isTitleVisible,
+    final bool isTitleVisible = false,
     final bool? isGridLayout,
     final ShapeBorder? alertShapeBorder}) {
   return showModalBottomSheet<ActionItem>(
